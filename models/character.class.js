@@ -48,11 +48,29 @@ class Character extends MovableObject {
         './img/2_character_pepe/3_jump/J-39.png'
     ];
 
+    IMAGES_HURT = [
+        './img/2_character_pepe/4_hurt/H-41.png',
+        './img/2_character_pepe/4_hurt/H-42.png',
+        './img/2_character_pepe/4_hurt/H-43.png'
+    ];
+
+    IMAGES_DEAD = [
+        './img/2_character_pepe/5_dead/D-51.png',
+        './img/2_character_pepe/5_dead/D-52.png',
+        './img/2_character_pepe/5_dead/D-53.png',
+        './img/2_character_pepe/5_dead/D-54.png',
+        './img/2_character_pepe/5_dead/D-55.png',
+        './img/2_character_pepe/5_dead/D-56.png',
+        './img/2_character_pepe/5_dead/D-57.png'
+    ];
+
     constructor() {
         super().loadImage(this.IMAGES_WALK[0])
         this.loadImages('idle', this.IMAGES_IDLE);
         this.loadImages('walk', this.IMAGES_WALK);
         this.loadImages('jump', this.IMAGES_JUMP);
+        this.loadImages('dead', this.IMAGES_DEAD);
+        this.loadImages('hurt', this.IMAGES_HURT);
         this.audioWalk = new Audio('./audio/walk.mp3');
         this.groundY = 480 - this.height - 50;
         this.y = this.groundY;
@@ -64,6 +82,9 @@ class Character extends MovableObject {
 
     gravity() {
         setInterval( () => {
+            if (this.isDead()) {
+                return;
+            }
             if (this.world.keyboard.UP && !this.isJumping) {
                 this.jump();
             }
@@ -73,7 +94,10 @@ class Character extends MovableObject {
 
     move() {
         setInterval( () => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            if (this.isDead()) {
+                return;
+            }
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
                 this.mirrorY = false;
                 this.audioWalk.play();
                 this.moveRight();
@@ -91,7 +115,16 @@ class Character extends MovableObject {
 
     animate() {
         setInterval( () => {
-            if (!this.isJumpAnimation) {
+            if (this.isDead()) {
+                this.setImgType('dead');
+                this.displayNextImageOnce();
+            }
+            else if (this.isHurt()) {
+                this.setImgType('hurt');
+                if (this.displayNextImageOnce()) {
+                    this.isHurtAnimation = false;
+                }
+            } else if (!this.isJumpAnimation) {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.setImgType('walk');
                 } else {
@@ -101,6 +134,9 @@ class Character extends MovableObject {
             }
         }, 100);
         setInterval( () => {
+            if (this.isDead()) {
+                return;
+            }
             if (this.isJumpAnimation) {
                 this.setImgType('jump');
                 this.displayNextImage()

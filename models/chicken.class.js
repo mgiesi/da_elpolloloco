@@ -1,8 +1,9 @@
-class Chicken extends MovableObject {
+class Chicken extends Enemy {
     width = 80;
     height = 80;
     speed = 0.5 + Math.random();
     currentImgType = 'walk';
+    hitpoints = 2;
 
     IMAGES_WALKING = [
         './img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',

@@ -4,6 +4,7 @@ class World {
     keyboard;
     camera_x;
     character = new Character();
+    statusBarEnergy = new StatusBar();
     level = level1;
 
     constructor(canvas, keyboard) {
@@ -18,6 +19,7 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.statusBarEnergy.world = this;
     }
 
     draw() {
@@ -32,6 +34,8 @@ class World {
         this.addObjectsToGame(this.level.coins);
 
         this.ctx.translate(-this.camera_x, 0);
+
+        this.addObjectToGame(this.statusBarEnergy);
 
         let self = this;
         requestAnimationFrame(function() {
@@ -53,9 +57,8 @@ class World {
         setInterval( () => {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    this.character.energy -= 2;
-                    console.log('energy: ' + this.character.energy);
-                                        
+                    this.character.hit(enemy.hitpoints);
+                    this.statusBarEnergy.setPercentage(this.character.energy);
                 }
             });
         }, 1000/60);

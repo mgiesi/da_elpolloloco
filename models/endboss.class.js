@@ -1,8 +1,9 @@
-class Endboss extends MovableObject {
+class Endboss extends Enemy {
     width = 320;
     height = 320;
     speed = 0.5 + Math.random();
     currentImgType = 'alert';
+    hitpoints = 4;
 
     IMAGES_ALERT = [
         './img/4_enemie_boss_chicken/2_alert/G5.png',
