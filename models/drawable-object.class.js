@@ -9,6 +9,8 @@ class DrawableObject {
     currentImgType;
     world;
 
+    visible = true;
+
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
@@ -48,11 +50,13 @@ class DrawableObject {
         this.currentImgType = imgType;
     }
 
-    draw(ctx) {        
-        this.flipImg(ctx);
-        this.drawImg(ctx);
-        // this.drawBBox(ctx);
-        this.flipImgBack(ctx);        
+    draw(ctx) {     
+        if (this.visible) {   
+            this.flipImg(ctx);
+            this.drawImg(ctx);
+            // this.drawBBox(ctx);
+            this.flipImgBack(ctx);
+        }
     }
 
     flipImg(ctx) {
@@ -85,5 +89,9 @@ class DrawableObject {
             ctx.rect( this.x + this.offset.left, this.y + this.offset.top, this.width - this.offset.right - this.offset.left, this.height - this.offset.bottom - this.offset.top);
             ctx.stroke();
         }
+    }
+
+    setVisible(visible) {
+        this.visible = visible;
     }
 }

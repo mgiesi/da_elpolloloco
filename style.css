@@ -1,5 +1,28 @@
+/* special-elite-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Special Elite';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fonts/special-elite-v19-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  }
+
 * {
     margin: 0;
+    font-family: 'Special Elite';
+}
+
+body {
+    background-image: url('img/background.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+h1 {
+    color: white;
+    font-size: 64px;
+    margin: 32px 0 16px 0;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.81);
 }
 
 .container-game {
@@ -12,4 +35,5 @@
 
 .canvas-game {
     background-color: black;
+    box-shadow: 0px 10px 32px 0px rgba(0,0,0,0.75);
 }

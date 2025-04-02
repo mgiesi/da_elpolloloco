@@ -1,46 +1,43 @@
-class StatusBar extends DrawableObject {
-    IMAGES_BAR = [
-        './img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png',
-        './img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
-        './img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
-        './img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
-        './img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
-        './img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png'
-    ];
-
-    x = 20;
-    y = 20;
+class StatusBar extends DrawableObject {   
+    x;
+    y;
     width = 200;
-    height = 40;
-    percentage = 0;
+    height = 50;
+    rightWidth = 15;
+    leftPadding = 22;
+    percentage = 100;
+    percentageWidth = 0;
 
-    constructor() {
-        super().loadImages('bar', this.IMAGES_BAR);
+    constructor(imgPrefix, x, y) {
+        super();
+
+        let IMAGES_BAR = [
+            imgPrefix + '/background.png',
+            imgPrefix + '/progressMiddle.png',
+            imgPrefix + '/progressRight.png',
+            imgPrefix + '/icon.png'
+        ];
+
+        this.x = x;
+        this.y = y;
+        this.loadImages('bar', IMAGES_BAR);
         this.img = this.imgCache['bar'][0];
+        this.setPercentage(100);
     }
 
     setPercentage(percentage) {
         this.percentage = percentage;
-        this.resolveImage();
-    }
-
-    resolveImage() {
-        if (this.percentage > 80) {
-            this.img = this.imgCache['bar'][0];
-        } else if (this.percentage > 60) {
-            this.img = this.imgCache['bar'][1];
-        } else if (this.percentage > 40) {
-            this.img = this.imgCache['bar'][2];
-        } else if (this.percentage > 20) {
-            this.img = this.imgCache['bar'][3];
-        } else if (this.percentage > 0) {
-            this.img = this.imgCache['bar'][4];
-        } else {
-            this.img = this.imgCache['bar'][5];
-        }
+        this.percentageWidth = (this.width - this.leftPadding) * this.percentage / 100;
     }
 
     drawImg(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        if (this.percentageWidth <= this.rightWidth) {
+            ctx.drawImage(this.imgCache['bar'][2], this.x + this.leftPadding, this.y, this.percentageWidth, this.height);
+        } else {
+            ctx.drawImage(this.imgCache['bar'][1], this.x + this.leftPadding, this.y, this.percentageWidth - this.rightWidth, this.height);
+            ctx.drawImage(this.imgCache['bar'][2], this.x + this.leftPadding + this.percentageWidth - this.rightWidth, this.y, this.rightWidth, this.height);
+        }
+        ctx.drawImage(this.imgCache['bar'][3], this.x, this.y, this.width, this.height);
     }
 }

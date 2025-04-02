@@ -15,7 +15,7 @@ class Chicken extends Enemy {
         super().loadImage(this.IMAGES_WALKING[0])
         this.loadImages('walk', this.IMAGES_WALKING);
 
-        this.x = 250 + Math.random() * 300;
+        this.x = 500 + Math.random() * 300;
         this.y = 480 - this.height - 55;
 
         this.animate();

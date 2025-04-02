@@ -16,11 +16,11 @@ class Endboss extends Enemy {
         './img/4_enemie_boss_chicken/2_alert/G12.png'
     ];
 
-    constructor() {
+    constructor(x) {
         super().loadImage(this.IMAGES_ALERT[0])
         this.loadImages('alert', this.IMAGES_ALERT);
 
-        this.x = 1050;
+        this.x = x;
         this.y = 480 - this.height - 35;
 
         this.animate();

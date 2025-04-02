@@ -4,8 +4,10 @@ class Character extends MovableObject {
     currentImgType = 'idle';
     speed = 10;
     acceleration = 0.5;
+    coins = 0;
 
     audioWalk;
+    audioCoin;
 
     offset = {
         top: 100,
@@ -72,6 +74,7 @@ class Character extends MovableObject {
         this.loadImages('dead', this.IMAGES_DEAD);
         this.loadImages('hurt', this.IMAGES_HURT);
         this.audioWalk = new Audio('./audio/walk.mp3');
+        this.audioCoin = new Audio('./audio/coin.mp3');
         this.groundY = 480 - this.height - 50;
         this.y = this.groundY;
 
@@ -143,5 +146,10 @@ class Character extends MovableObject {
             } 
         }, 150);
         
+    }
+
+    addCoin() {
+        this.coins++;
+        this.audioCoin.play();
     }
 }

@@ -15,10 +15,11 @@ class Coin extends BackgroundObject {
         left: 50
     };
 
-    constructor(imgPath) {
-        super(imgPath, 400 + Math.random() * 100)
+    constructor(x, y) {
+        super('./img/8_coin/coin_1.png')
 
-        this.y = 480 - this.height - 50;
+        this.x = x;
+        this.y = y;
 
         this.centerX = this.x + this.width/2;
         this.centerY = this.y + this.height/2;
