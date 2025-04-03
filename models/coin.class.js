@@ -1,4 +1,4 @@
-class Coin extends BackgroundObject {
+class Coin extends MovableObject {
     width = 140;
     height = 140;
     scaledMax = 155;
@@ -16,7 +16,7 @@ class Coin extends BackgroundObject {
     };
 
     constructor(x, y) {
-        super('./img/8_coin/coin_1.png')
+        super().loadImage('./img/8_coin/coin_1.png');
 
         this.x = x;
         this.y = y;

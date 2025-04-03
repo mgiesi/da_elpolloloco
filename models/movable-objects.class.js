@@ -40,6 +40,10 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    attacked() {
+        
+    }
+
     isDead() {
         return this.energy <= 0;
     }

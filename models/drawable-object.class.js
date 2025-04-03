@@ -26,10 +26,12 @@ class DrawableObject {
     }
 
     displayNextImage() {
-        this.img = this.imgCache[this.currentImgType][this.currentImg];
-        this.currentImg++;
-        if (this.currentImg >= this.imgCache[this.currentImgType].length) {
-            this.currentImg = 0;
+        if (this.currentImgType !== undefined) {
+            this.img = this.imgCache[this.currentImgType][this.currentImg];
+            this.currentImg++;
+            if (this.currentImg >= this.imgCache[this.currentImgType].length) {
+                this.currentImg = 0;
+            }
         }
     }
 
@@ -54,7 +56,7 @@ class DrawableObject {
         if (this.visible) {   
             this.flipImg(ctx);
             this.drawImg(ctx);
-            // this.drawBBox(ctx);
+             this.drawBBox(ctx);
             this.flipImgBack(ctx);
         }
     }
@@ -76,13 +78,13 @@ class DrawableObject {
     }
 
     drawImg(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        if (this.img !== undefined) {
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        }
     }
 
     drawBBox(ctx) {
-        if (this instanceof Character ||
-            this instanceof Chicken ||
-            this instanceof Coin) {
+        if (this instanceof MovableObject) {
             ctx.beginPath();
             ctx.lineWidth = '4';
             ctx.strokeStyle = 'green';

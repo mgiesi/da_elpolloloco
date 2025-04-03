@@ -5,9 +5,12 @@ class Character extends MovableObject {
     speed = 10;
     acceleration = 0.5;
     coins = 0;
+    bottles = 0;
+    energy = 1000;
 
     audioWalk;
     audioCoin;
+    audioBottle;
 
     offset = {
         top: 100,
@@ -75,6 +78,7 @@ class Character extends MovableObject {
         this.loadImages('hurt', this.IMAGES_HURT);
         this.audioWalk = new Audio('./audio/walk.mp3');
         this.audioCoin = new Audio('./audio/coin.mp3');
+        this.audioBottle = new Audio('./audio/bottle.mp3');
         this.groundY = 480 - this.height - 50;
         this.y = this.groundY;
 
@@ -151,5 +155,14 @@ class Character extends MovableObject {
     addCoin() {
         this.coins++;
         this.audioCoin.play();
+    }
+
+    addBottle() {
+        this.bottles++;
+        this.audioBottle.play();
+    }
+
+    throwBottle() {
+
     }
 }

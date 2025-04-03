@@ -4,20 +4,32 @@ class World {
     keyboard;
     camera_x;
     character = new Character();
-    statusBarEnergy = new StatusBar('./img/7_statusbars/1_statusbar/2_statusbar_health/blue', 20, 0);
-    statusBarCoins = new StatusBar('./img/7_statusbars/1_statusbar/1_statusbar_coin/orange', 20, 50);
-    statusBarBottles = new StatusBar('./img/7_statusbars/1_statusbar/3_statusbar_bottle/green', 20, 100);
+    statusBarEnergy = new StatusBar('./img/7_statusbars/1_statusbar/2_statusbar_health/blue', 20, 0, 1000, 1000);
+    statusBarCoins = new StatusBar('./img/7_statusbars/1_statusbar/1_statusbar_coin/orange', 20, 50, 100, 0);
+    statusBarBottles = new StatusBar('./img/7_statusbars/1_statusbar/3_statusbar_bottle/green', 20, 100, 5, 0);
     
-    level = level1;
+    audioBackground = new Audio('./audio/backgroundmusic.mp3');
+
+    level;
 
     constructor(canvas, keyboard) {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.ctx = canvas.getContext('2d');
         this.ctx.fillStyle = '#74b9ff';
+        this.setLevel(level1);
         this.draw();
         this.setWorld();
         this.checkCollisions();
+
+        this.audioBackground.volume = 0.1;
+        this.audioBackground.play();
+    }
+
+    setLevel(level) {
+        this.level = level;
+        this.statusBarCoins.setMaxValue(this.level.coins.length);
+        this.statusBarBottles.setMaxValue(this.level.bottles.length);
     }
 
     setWorld() {
@@ -35,6 +47,7 @@ class World {
         this.addObjectsToGame(this.level.enemies);
         this.addObjectsToGame(this.level.clouds);
         this.addObjectsToGame(this.level.coins);
+        this.addObjectsToGame(this.level.bottles);
 
         this.ctx.translate(-this.camera_x, 0);
 
@@ -66,14 +79,22 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     this.character.hit(enemy.hitpoints);
-                    this.statusBarEnergy.setPercentage(this.character.energy);
+                    enemy.attacked();
+                    this.statusBarEnergy.setActValue(this.character.energy);
                 }
             });
             this.level.coins.forEach((coin) => {
                 if (this.character.isColliding(coin)) {
                     this.character.addCoin();
                     coin.setVisible(false);
-                    this.statusBarCoins.setPercentage(this.character.coins);
+                    this.statusBarCoins.setActValue(this.character.coins);
+                }
+            });
+            this.level.bottles.forEach((bottle) => {
+                if (this.character.isColliding(bottle)) {
+                    this.character.addBottle();
+                    bottle.setVisible(false);
+                    this.statusBarBottles.setActValue(this.character.bottles);
                 }
             });
         }, 1000/60);

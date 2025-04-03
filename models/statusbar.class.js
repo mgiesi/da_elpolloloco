@@ -5,10 +5,11 @@ class StatusBar extends DrawableObject {
     height = 50;
     rightWidth = 15;
     leftPadding = 22;
-    percentage = 100;
-    percentageWidth = 0;
+    maxValue = 1000;
+    actValue = 100;
+    actValueWidth = 0;
 
-    constructor(imgPrefix, x, y) {
+    constructor(imgPrefix, x, y, maxValue, actValue) {
         super();
 
         let IMAGES_BAR = [
@@ -22,21 +23,27 @@ class StatusBar extends DrawableObject {
         this.y = y;
         this.loadImages('bar', IMAGES_BAR);
         this.img = this.imgCache['bar'][0];
-        this.setPercentage(100);
+        this.maxValue = maxValue;
+        this.setActValue(actValue);
     }
 
-    setPercentage(percentage) {
-        this.percentage = percentage;
-        this.percentageWidth = (this.width - this.leftPadding) * this.percentage / 100;
+    setMaxValue(maxValue) {
+        this.maxValue = maxValue;
+        this.setActValue(this.actValue);
+    }
+
+    setActValue(actValue) {
+        this.actValue = actValue;
+        this.actValueWidth = (this.width - this.leftPadding) * (this.actValue / this.maxValue);
     }
 
     drawImg(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-        if (this.percentageWidth <= this.rightWidth) {
-            ctx.drawImage(this.imgCache['bar'][2], this.x + this.leftPadding, this.y, this.percentageWidth, this.height);
+        if (this.actValueWidth <= this.rightWidth) {
+            ctx.drawImage(this.imgCache['bar'][2], this.x + this.leftPadding, this.y, this.actValueWidth, this.height);
         } else {
-            ctx.drawImage(this.imgCache['bar'][1], this.x + this.leftPadding, this.y, this.percentageWidth - this.rightWidth, this.height);
-            ctx.drawImage(this.imgCache['bar'][2], this.x + this.leftPadding + this.percentageWidth - this.rightWidth, this.y, this.rightWidth, this.height);
+            ctx.drawImage(this.imgCache['bar'][1], this.x + this.leftPadding, this.y, this.actValueWidth - this.rightWidth, this.height);
+            ctx.drawImage(this.imgCache['bar'][2], this.x + this.leftPadding + this.actValueWidth - this.rightWidth, this.y, this.rightWidth, this.height);
         }
         ctx.drawImage(this.imgCache['bar'][3], this.x, this.y, this.width, this.height);
     }
