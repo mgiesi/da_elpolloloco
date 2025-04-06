@@ -6,6 +6,8 @@ class Chicken extends Enemy {
     IMAGES_WALKING;
     IMAGES_DEAD;
 
+    killByJumpOn = true;
+
     constructor() {
         super();
     }
@@ -15,11 +17,20 @@ class Chicken extends Enemy {
             if (!this.world || !this.world.isRunning()) {
                 return;
             }
-            this.displayNextImage();
+            if (this.isDead()) {
+                this.setImgType('dead');
+                this.displayNextImageOnce();
+            } else {
+                this.setImgType('walk');
+                this.displayNextImage();
+            }            
         }, 150);
         
         setInterval(() => {
             if (!this.world || !this.world.isRunning()) {
+                return;
+            }
+            if (this.isDead()) {
                 return;
             }
             this.moveLeft();

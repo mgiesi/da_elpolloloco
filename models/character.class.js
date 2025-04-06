@@ -177,4 +177,17 @@ class Character extends MovableObject {
     throwBottle() {
 
     }
+    
+    isJumpedOn(obj) {
+        let bx1 = (this.x + this.width - this.offset.right) >= obj.x + obj.offset.left;
+        let bx2 = (this.x + this.width - this.offset.right) <= obj.x + obj.width - obj.offset.right;
+        let bx3 = (this.x + this.offset.left) >= (obj.x + obj.offset.left);
+        let bx4 = (this.x + this.offset.left) <= (obj.x + obj.width - obj.offset.right);
+        let by1 = (this.y + this.height + this.offset.bottom) >= obj.y + obj.offset.top;
+        let by2 = (this.y + this.height + this.offset.bottom) <= (obj.y + obj.offset.top + 20);
+        return obj.visible &&
+               !obj.isDead() && 
+               this.speedY < 0 &&
+               ((bx1 && bx2) || (bx3 && bx4)) && by1 && by2;
+    }
 }

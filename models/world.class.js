@@ -127,7 +127,11 @@ class World {
                 return;
             }
             this.level.enemies.forEach((enemy) => {
-                if (this.character.isColliding(enemy)) {
+                if (enemy.killByJumpOn && this.character.isJumpedOn(enemy)) {
+                    console.log('jumped on');
+                    
+                    enemy.jumpedOn();
+                } else if (this.character.isColliding(enemy)) {
                     this.character.hit(enemy.hitpoints);
                     enemy.attacked();
                     this.statusBarEnergy.setActValue(this.character.energy);

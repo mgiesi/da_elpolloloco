@@ -11,12 +11,13 @@ class ChickenNormal extends Chicken {
     ];
 
     IMAGES_DEAD = [
-        './img/3_enemies_chicken/chicken_small/2_dead/dead.png',
+        './img/3_enemies_chicken/chicken_normal/2_dead/dead.png',
     ];
 
     constructor() {
-        super().loadImage(this.IMAGES_WALKING[0])
+        super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages('walk', this.IMAGES_WALKING);
+        this.loadImages('dead', this.IMAGES_DEAD);
 
         this.audioAttack = new Audio('./audio/chickenattack.mp3');
 
@@ -24,5 +25,10 @@ class ChickenNormal extends Chicken {
         this.y = 480 - this.height - 55;
 
         this.animate();
+    }
+
+    kill() {
+        this.y = 480 - this.height - 40;
+        super.kill();
     }
 }
