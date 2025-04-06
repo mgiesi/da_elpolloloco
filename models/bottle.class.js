@@ -40,6 +40,9 @@ class Bottle extends MovableObject {
 
     animate() {
         setInterval( () => {
+            if (!this.world || !this.world.isRunning()) {
+                return;
+            }
             this.displayNextImage();
         }, 150);
     }

@@ -1,0 +1,20 @@
+.layout-subpage {
+    display: flex;
+    flex-direction: column;
+}
+
+.layout-line {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    margin-bottom: 12px;
+
+    font-size: 24px;
+}
+
+.layout-levels {
+    display: flex;
+    justify-content: space-between;
+}

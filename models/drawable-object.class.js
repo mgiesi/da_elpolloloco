@@ -56,7 +56,7 @@ class DrawableObject {
         if (this.visible) {   
             this.flipImg(ctx);
             this.drawImg(ctx);
-             this.drawBBox(ctx);
+            //this.drawBBox(ctx);
             this.flipImgBack(ctx);
         }
     }

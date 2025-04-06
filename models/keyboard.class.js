@@ -4,6 +4,7 @@ class Keyboard {
     UP = false;
     DOWN = false;
     SPACE = false;
+    PAUSE = false;
 
     constructor() {
         
@@ -26,6 +27,10 @@ class Keyboard {
             case 'Space':
                 this.SPACE = true;
                 break;
+            case 'P':
+            case 'p':
+                this.PAUSE = true;
+                break;
         }
     }
 
@@ -45,6 +50,10 @@ class Keyboard {
                 break;
             case 'Space':
                 this.SPACE = false;
+                break;
+            case 'P':
+            case 'p':
+                this.PAUSE = false;
                 break;
         }
     }

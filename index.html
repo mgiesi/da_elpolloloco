@@ -8,6 +8,9 @@
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/elements.css">
+    <link rel="stylesheet" href="css/layouts.css">
 
     <script src="models/keyboard.class.js"></script>
     <script src="models/world.class.js"></script>
@@ -17,6 +20,8 @@
     <script src="models/character.class.js"></script>
     <script src="models/enemy.class.js"></script>
     <script src="models/chicken.class.js"></script>
+    <script src="models/chicken-small.class.js"></script>
+    <script src="models/chicken-normal.class.js"></script>
     <script src="models/endboss.class.js"></script>
     <script src="models/cloud.class.js"></script>
     <script src="models/background-object.class.js"></script>
@@ -25,14 +30,145 @@
     <script src="models/level.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
+    <script src="js/nav.js"></script>
+    <script src="js/settings.js"></script>
 </head>
-<body onload="init()">
-    <div class="container-game">
-        <h1>El Pollo Loco</h1>
-        <div class="game">
+<body onload="">
+    <div class="container-game">     
+        <div id="container-splashscreen" class="container">
+            <h1>El Pollo Loco</h1>
+            <img class="logo" src="./img/logo.png" onclick="navigateTo('start');init()">
+            <h3>Click on pepe to start the game!</h3>
+        </div>
+        <div id="container-start" class="container hidden">
+            <h1>El Pollo Loco</h1>
+            <div class="layout-menu">
+                <div class="btn-main" onclick="navigateTo('level')">
+                    <img src="./img/icons/game.svg"> START GAME
+                </div>
+                <div class="btn-main" onclick="navigateTo('settings')">
+                    <img src="./img/icons/settings.svg"> SETTINGS
+                </div>
+                <div class="btn-main" onclick="navigateTo('help')">
+                    <img src="./img/icons/help.svg"> HELP
+                </div>
+                <div class="btn-main" onclick="navigateTo('impressum')">
+                    <img src="./img/icons/impressum.svg"> IMPRESSUM
+                </div>
+            </div>
+        </div>
+        <div id="container-level" class="container hidden">
+            <div class="layout-subpage">
+                <h2>- SELECT LEVEL -</h2>
+                <div class="layout-levels">
+                    <div class="level" onclick="setLevel('easy')">
+                        EASY
+                    </div>
+                    <div class="level" onclick="setLevel('medium')">
+                        MEDIUM
+                    </div>
+                    <div class="level" onclick="setLevel('hard')">
+                        HARD
+                    </div>
+                </div> 
+                <div class="btn-sub" onclick="navigateTo('start')">
+                    BACK
+                </div>
+            </div>
+        </div>
+        <div id="container-game" class="container hidden">
             <canvas id="canvas-game" class="canvas-game" width="720" height="480">
 
             </canvas>
+        </div>
+        <div id="container-gameover" class="container hidden">
+
+        </div>
+        <div id="container-settings" class="container hidden">
+            <div class="layout-subpage">
+                <h2>- SETTINGS -</h2>
+                <div class="layout-line settings-line">
+                    <div>
+                        <img src="./img/icons/music.svg">
+                    </div> 
+                    <span>MUSIC</span>
+                    <div class="btn-chk" onclick="toggleSetting('music')">
+                        <div id="settings-music-on" class="btn-chk-btn btn-chk-on">On</div>
+                        <div id="settings-music-off" class="btn-chk-btn btn-chk-off hidden">Off</div>
+                    </div>
+                </div>
+                <div class="layout-line settings-line">
+                    <div>
+                        <img src="./img/icons/sound.svg">
+                    </div> 
+                    <span>SOUNDS</span>
+                    <div class="btn-chk" onclick="toggleSetting('sound')">
+                        <div id="settings-sound-on" class="btn-chk-btn btn-chk-on">On</div>
+                        <div id="settings-sound-off" class="btn-chk-btn btn-chk-off hidden">Off</div>
+                    </div>
+                </div>
+                <div class="btn-sub" onclick="navigateTo('start')">
+                    BACK
+                </div>
+            </div>
+        </div>
+        <div id="container-help" class="container hidden">
+            <div class="layout-subpage">
+                <h2>- HELP -</h2>
+                <div class="layout-line">
+                    <div class="btn-kbd">
+                        <img src="./img/icons/kbd-left.svg">
+                    </div> MOVE LEFT
+                </div>
+                <div class="layout-line">
+                    <div class="btn-kbd">
+                        <img src="./img/icons/kbd-right.svg">
+                    </div> MOVE RIGHT
+                </div>
+                <div class="layout-line">
+                    <div class="btn-kbd">
+                        <img src="./img/icons/kbd-up.svg">
+                    </div> JUMP
+                </div>
+                <div class="layout-line">
+                    <div class="btn-kbd">
+                        <img src="./img/icons/kbd-space.svg">
+                    </div> THROW BOTTLE
+                </div>
+                <div class="layout-line">
+                    <div class="btn-kbd">
+                        P
+                    </div> PAUSE GAME
+                </div>
+                <div class="btn-sub" onclick="navigateTo('start')">
+                    BACK
+                </div>
+            </div>
+        </div>
+        <div id="container-impressum" class="container hidden">
+            <div class="layout-subpage">
+                <h2>- IMPRESSUM -</h2>
+                <div class="impressum">
+                    Angaben gemäß § 5 DDG
+                    <br>
+                    <br>
+                    Markus Giesinger
+                    <br>
+                    Bahnhofstraße 1
+                    <br>
+                    6923 Lauterach
+                    <br>
+                    <br>
+                    Kontakt:
+                    <br>
+                    Telefon: <a href="tel:+43 660 12 12 45 67">+43 660 12 12 45 67</a>
+                    <br>
+                    E-Mail: <a href="mailto:mgiesigamer@gmail.com">mgiesigamer@gmail.com</a>
+                </div> 
+                <div class="btn-sub" onclick="navigateTo('start')">
+                    BACK
+                </div>
+            </div>
         </div>
     </div>
 </body>

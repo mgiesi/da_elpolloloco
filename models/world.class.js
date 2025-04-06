@@ -12,21 +12,54 @@ class World {
 
     level;
 
+    pause = true;
+    ingame = false;
+
+    playSounds;
+    playMusic;
+
     constructor(canvas, keyboard) {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.ctx = canvas.getContext('2d');
         this.ctx.fillStyle = '#74b9ff';
-        this.setLevel(level1);
-        this.draw();
-        this.setWorld();
-        this.checkCollisions();
 
-        this.audioBackground.volume = 0.1;
-        this.audioBackground.play();
+        this.audioBackground.loop = true;
     }
 
-    setLevel(level) {
+    setSetting(key, value) {
+        switch (key) {
+            case 'music': 
+                this.playMusic = value;
+                this.toggleMusic();
+                break;
+
+            case 'sound':
+                this.playSounds = value;
+                break;
+        }
+    }
+
+    toggleMusic() {
+        if (this.playMusic) {
+            this.audioBackground.volume = 0.1;
+            this.audioBackground.play();
+        } else {
+            this.audioBackground.currentTime = 0;
+            this.audioBackground.pause();
+        }
+    }
+
+    startGame(difficulty) {
+        this.setLevel(level1, difficulty);
+        this.setWorld();
+        this.draw();
+        this.checkCollisions();
+        this.pause = false;
+        this.ingame = true;
+    }
+
+    setLevel(level, difficulty) {
         this.level = level;
         this.statusBarCoins.setMaxValue(this.level.coins.length);
         this.statusBarBottles.setMaxValue(this.level.bottles.length);
@@ -35,6 +68,18 @@ class World {
     setWorld() {
         this.character.world = this;
         this.statusBarEnergy.world = this;
+        this.setWorldToObjects(this.level.enemies);
+        this.setWorldToObjects(this.level.clouds);
+    }
+
+    setWorldToObjects(objects) {
+        objects.forEach(object => {
+            object.world = this;
+        });
+    }
+
+    isRunning() {
+        return !this.pause && this.ingame;
     }
 
     draw() {
@@ -55,6 +100,8 @@ class World {
         this.addObjectToGame(this.statusBarCoins);
         this.addObjectToGame(this.statusBarBottles);
 
+        this.pause = this.keyboard.PAUSE;
+
         let self = this;
         requestAnimationFrame(function() {
             self.draw();
@@ -73,6 +120,9 @@ class World {
 
     checkCollisions() {
         setInterval( () => {
+            if (!this.isRunning()) {
+                return;
+            }
             if (this.character.isDead()) {
                 return;
             }

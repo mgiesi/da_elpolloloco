@@ -89,6 +89,9 @@ class Character extends MovableObject {
 
     gravity() {
         setInterval( () => {
+            if (!this.world || !this.world.isRunning()) {
+                return;
+            }
             if (this.isDead()) {
                 return;
             }
@@ -101,6 +104,9 @@ class Character extends MovableObject {
 
     move() {
         setInterval( () => {
+            if (!this.world || !this.world.isRunning()) {
+                return;
+            }
             if (this.isDead()) {
                 return;
             }
@@ -122,6 +128,9 @@ class Character extends MovableObject {
 
     animate() {
         setInterval( () => {
+            if (!this.world || !this.world.isRunning()) {
+                return;
+            }
             if (this.isDead()) {
                 this.setImgType('dead');
                 this.displayNextImageOnce();
@@ -141,6 +150,9 @@ class Character extends MovableObject {
             }
         }, 100);
         setInterval( () => {
+            if (!this.world || !this.world.isRunning()) {
+                return;
+            }
             if (this.isDead()) {
                 return;
             }
