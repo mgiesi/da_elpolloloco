@@ -1,0 +1,84 @@
+@media (max-width: 800px), (max-height: 600px) {
+    .btn-main span {
+        font-size: 24px;
+    }
+    
+    .btn-main img {
+        width: 64px;
+        height: 64px;
+    
+        margin-right: 12px;
+    }
+    
+    .btn-sub {
+        padding: 12px;
+        font-size: 24px;
+    }
+
+    .btn-back {
+        bottom: 12px;
+        right: 12px;
+    }
+    
+    .btn-kbd {
+        width: 92px;
+        height: 48px;
+        margin-right: 12px;
+    }
+    
+    .btn-kbd img {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .settings-line {
+        height: 48px;    
+        padding: 12px;
+        margin-right: 12px;
+    }
+    
+    .settings-line img {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .btn-chk {
+        height: 42px;
+        width: 96px;
+    }
+    
+    .btn-chk-btn {
+        height: 42px;    
+        margin-left: -2px;    
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    .btn-chk-on {
+        margin-right: 32px;
+    }
+    
+    .btn-chk-off {
+        margin-left: 44px;
+    }
+    
+    .impressum {    
+        padding: 24px;
+    }
+    
+    .level {
+        max-width: 256px;
+        max-height: 256px;
+        padding: 24px;
+    }
+    
+    .gameover img {
+        width: 400px;
+    }
+}
+
+@media (max-height: 600px) {
+    .btn-main {
+        width: 100%;
+    }
+}

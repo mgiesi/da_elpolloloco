@@ -13,7 +13,7 @@ class Cloud extends MovableObject {
     }
 
     move() {
-        setInterval( () => {
+        setStoppableInterval( () => {
             if (!this.world || !this.world.isRunning()) {
                 return;
             }

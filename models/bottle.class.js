@@ -5,6 +5,8 @@ class Bottle extends MovableObject {
     centerY;
     hitpoints = 10;
 
+    audioCollected;
+
     IMAGES_BOTTLE = [
         './img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
         './img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
@@ -32,6 +34,8 @@ class Bottle extends MovableObject {
         this.loadImages('bottle', this.IMAGES_BOTTLE);
         this.loadImages('splash', this.IMAGES_SPLASH);
 
+        this.audioCollected = new Audio('./audio/bottle.mp3');
+
         this.x = x;
         this.y = y;
 
@@ -39,11 +43,16 @@ class Bottle extends MovableObject {
     }
 
     animate() {
-        setInterval( () => {
+        setStoppableInterval( () => {
             if (!this.world || !this.world.isRunning()) {
                 return;
             }
             this.displayNextImage();
         }, 150);
+    }
+
+    collected() {
+        this.audioCollected.play();
+        this.setVisible(false);
     }
 }

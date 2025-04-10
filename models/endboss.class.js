@@ -27,7 +27,7 @@ class Endboss extends Enemy {
     }
 
     animate() {
-        setInterval( () => {
+        setStoppableInterval( () => {
             this.displayNextImage();
         }, 150);      
     }

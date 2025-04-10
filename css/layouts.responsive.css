@@ -1,0 +1,16 @@
+@media (max-height: 600px) {
+  .layout-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: none;
+    gap: 2rem;
+    justify-items: center;
+    align-items: center;
+  }
+   
+  .layout-levels {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 24px;
+  }
+}

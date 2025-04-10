@@ -13,7 +13,7 @@ class Chicken extends Enemy {
     }
 
     animate() {
-        setInterval( () => {
+        setStoppableInterval( () => {
             if (!this.world || !this.world.isRunning()) {
                 return;
             }
@@ -26,7 +26,7 @@ class Chicken extends Enemy {
             }            
         }, 150);
         
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (!this.world || !this.world.isRunning()) {
                 return;
             }
@@ -41,7 +41,7 @@ class Chicken extends Enemy {
     }
 
     attacked() {
-        this.audioAttack.currentTime = 2.6;
+        this.audioAttack.currentTime = 2.5;
         this.audioAttack.play();
     }
 }

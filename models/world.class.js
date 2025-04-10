@@ -12,7 +12,8 @@ class World {
 
     level;
 
-    pause = true;
+    pause = false;
+    lastPauseKey = false;
     ingame = false;
 
     playSounds;
@@ -48,6 +49,11 @@ class World {
             this.audioBackground.currentTime = 0;
             this.audioBackground.pause();
         }
+    }
+
+    stopGame() {
+        this.ingame = false;
+        stopIntervals();
     }
 
     startGame(difficulty) {
@@ -100,7 +106,7 @@ class World {
         this.addObjectToGame(this.statusBarCoins);
         this.addObjectToGame(this.statusBarBottles);
 
-        this.pause = this.keyboard.PAUSE;
+        this.checkPauseGame();
 
         let self = this;
         requestAnimationFrame(function() {
@@ -119,7 +125,7 @@ class World {
     }
 
     checkCollisions() {
-        setInterval( () => {
+        setStoppableInterval( () => {
             if (!this.isRunning()) {
                 return;
             }
@@ -128,8 +134,6 @@ class World {
             }
             this.level.enemies.forEach((enemy) => {
                 if (enemy.killByJumpOn && this.character.isJumpedOn(enemy)) {
-                    console.log('jumped on');
-                    
                     enemy.jumpedOn();
                 } else if (this.character.isColliding(enemy)) {
                     this.character.hit(enemy.hitpoints);
@@ -140,17 +144,25 @@ class World {
             this.level.coins.forEach((coin) => {
                 if (this.character.isColliding(coin)) {
                     this.character.addCoin();
-                    coin.setVisible(false);
+                    coin.collected();
                     this.statusBarCoins.setActValue(this.character.coins);
                 }
             });
             this.level.bottles.forEach((bottle) => {
                 if (this.character.isColliding(bottle)) {
                     this.character.addBottle();
-                    bottle.setVisible(false);
+                    bottle.collected();
                     this.statusBarBottles.setActValue(this.character.bottles);
                 }
             });
         }, 1000/60);
+    }
+    
+    checkPauseGame() {
+        if (this.keyboard.PAUSE && !this.lastPauseKey) {
+            this.pause = !this.pause;
+        }
+
+        this.lastPauseKey = this.keyboard.PAUSE;
     }
 }

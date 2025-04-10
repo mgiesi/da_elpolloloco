@@ -8,6 +8,8 @@ class Coin extends MovableObject {
     centerX;
     centerY;
 
+    audioCollected;
+
     offset = {
         top: 50,
         right: 50,
@@ -17,6 +19,8 @@ class Coin extends MovableObject {
 
     constructor(x, y) {
         super().loadImage('./img/8_coin/coin_1.png');
+
+        this.audioCollected = new Audio('./audio/coin.mp3');
 
         this.x = x;
         this.y = y;
@@ -29,7 +33,7 @@ class Coin extends MovableObject {
     }
 
     animate() {
-        setInterval( () => {
+        setStoppableInterval( () => {
             if (this.scaleUp) {
                 this.width += this.scaleFactor;
                 if (this.width >= this.scaledMax) {
@@ -45,10 +49,15 @@ class Coin extends MovableObject {
     }
 
     move() {
-        setInterval( () => {
+        setStoppableInterval( () => {
             this.x = this.centerX - this.width/2;
             this.y = this.centerY - this.height/2;
             this.height = this.width;
         }, 1000/60);  
+    }
+
+    collected() {
+        this.audioCollected.play();
+        this.setVisible(false);
     }
 }

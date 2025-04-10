@@ -7,6 +7,7 @@ class DrawableObject {
     imgCache = {};
     currentImg = 0;
     currentImgType;
+    animationDone;
     world;
 
     visible = true;
@@ -40,8 +41,10 @@ class DrawableObject {
         this.currentImg++;
         if (this.currentImg >= this.imgCache[this.currentImgType].length) {
             this.currentImg = this.imgCache[this.currentImgType].length-1;
+            this.animationDone = true;
             return true;
         }
+        this.animatoinDone = false;
         return false;
     }
 

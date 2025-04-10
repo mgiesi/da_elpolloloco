@@ -1,28 +1,23 @@
 .btn-main {
     display: flex;
     align-items: center;
-
-    padding: 12px;
-
+    justify-content: flex-start;
+    width: 400px;
     background-color: rgb(247, 158, 15);
     color: rgb(0, 0, 0);
-
     border-radius: 16px;
-
     border: solid 4px rgb(0, 0, 0);
-
-    margin-bottom: 16px;
-
     cursor: pointer;
-
-    font-size: 38px;
-
     transition: all 200ms ease-in-out;
 }
 
 .btn-main:hover {
     background-color: rgb(245, 181, 78);
     box-shadow: 0px 0px 24px rgba(255, 255, 255, 0.61);
+}
+
+.btn-main span {
+    font-size: 38px;
 }
 
 .btn-main img {
@@ -36,22 +31,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     padding: 12px;
-
     background-color: rgb(247, 158, 15);
     color: rgb(0, 0, 0);
-
     border-radius: 16px;
     border: solid 4px rgb(0, 0, 0);
-
-    margin-top: 32px;
-    margin-bottom: 16px;
-
     cursor: pointer;
-
     font-size: 24px;
-
     transition: all 200ms ease-in-out;
 }
 
@@ -59,19 +45,27 @@
     background-color: rgb(245, 181, 78);
 }
 
+.btn-back {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+.btn-restart {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
 .btn-kbd {
     width: 92px;
     height: 48px;
-
     border-radius: 16px;
     border: solid 2px rgb(0, 0, 0);
-
     margin-right: 12px;
-
     display: flex;
     justify-content: center;
-    align-items: center;
-    
+    align-items: center;    
     background-color: rgb(245, 202, 134);
 }
 
@@ -82,20 +76,14 @@
 
 .settings-line {
     height: 48px;
-
     padding: 12px;
-
     border-radius: 16px;
     border: solid 2px rgb(0, 0, 0);
-
-    margin-right: 12px;
-
     display: flex;
     justify-content: flex-start;
-    align-items: center;
-    
+    align-items: center;    
     background-color: rgb(245, 202, 134);
-
+    width: 100%;
 }
 
 .settings-line span {
@@ -110,31 +98,22 @@
 .btn-chk {
     height: 42px;
     width: 96px;
-
     background-color: rgb(250, 177, 60);
-
     border-radius: 16px;
     border: solid 2px rgb(0, 0, 0);
-
     display: flex;
     align-items: center;
-
     cursor: pointer;
 }
 
 .btn-chk-btn {
     height: 42px;
-
     background-color: rgb(247, 158, 15);
-
     border-radius: 16px;
     border: solid 2px rgb(0, 0, 0);
-
     display: flex;
     align-items: center;
-
     margin-left: -2px;
-
     padding-left: 12px;
     padding-right: 12px;
 }
@@ -149,23 +128,17 @@
 
 .impressum {
     background-color: rgb(250, 177, 60);
-
     border-radius: 16px;
     border: solid 2px rgb(0, 0, 0);
-
     padding: 24px;
 }
 
 .level {
     max-width: 256px;
     max-height: 256px;
-
     background-color: rgb(250, 177, 60);
-
     border-radius: 16px;
     border: solid 2px rgb(0, 0, 0);
-
     padding: 24px;
-
     cursor: pointer;
 }

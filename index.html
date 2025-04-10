@@ -8,10 +8,14 @@
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.responsive.css">
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/elements.css">
+    <link rel="stylesheet" href="css/elements.responsive.css">
     <link rel="stylesheet" href="css/layouts.css">
+    <link rel="stylesheet" href="css/layouts.responsive.css">
 
+    <script src="js/intervals.js"></script>
     <script src="models/keyboard.class.js"></script>
     <script src="models/world.class.js"></script>
     <script src="models/drawable-object.class.js"></script>
@@ -33,27 +37,37 @@
     <script src="js/nav.js"></script>
     <script src="js/settings.js"></script>
 </head>
-<body onload="">
-    <div class="container-game">     
-        <div id="container-splashscreen" class="container">
+<body onload="init()">
+    <div class="container-game">  
+        <div id="container-splashscreen" class="container hidden">
             <h1>El Pollo Loco</h1>
-            <img class="logo" src="./img/logo.png" onclick="navigateTo('start');init()">
+            <div class="container-img">
+                <img class="logo" src="./img/logo.png" onclick="navigateTo('start');initGame()">
+            </div>
             <h3>Click on pepe to start the game!</h3>
+        </div>  
+        <div id="container-landscapeinfo" class="container hidden">
+            <h1>El Pollo Loco</h1>
+            <div class="container-img">
+                <img class="logo" src="./img/landscapeinfo.png">
+            </div>
+            <h3>Please rotate your device to landscape mode.</h3>
         </div>
         <div id="container-start" class="container hidden">
             <h1>El Pollo Loco</h1>
             <div class="layout-menu">
+                <!-- <div class="btn-main" onclick="navigateTo('gameover')"> -->
                 <div class="btn-main" onclick="navigateTo('level')">
-                    <img src="./img/icons/game.svg"> START GAME
+                    <img src="./img/icons/game.svg"><span>START GAME</span> 
                 </div>
                 <div class="btn-main" onclick="navigateTo('settings')">
-                    <img src="./img/icons/settings.svg"> SETTINGS
+                    <img src="./img/icons/settings.svg"><span>SETTINGS</span> 
                 </div>
                 <div class="btn-main" onclick="navigateTo('help')">
-                    <img src="./img/icons/help.svg"> HELP
+                    <img src="./img/icons/help.svg"><span>HELP</span> 
                 </div>
                 <div class="btn-main" onclick="navigateTo('impressum')">
-                    <img src="./img/icons/impressum.svg"> IMPRESSUM
+                    <img src="./img/icons/impressum.svg"><span>IMPRESSUM</span> 
                 </div>
             </div>
         </div>
@@ -71,7 +85,7 @@
                         HARD
                     </div>
                 </div> 
-                <div class="btn-sub" onclick="navigateTo('start')">
+                <div class="btn-sub btn-back" onclick="navigateTo('start')">
                     BACK
                 </div>
             </div>
@@ -82,32 +96,45 @@
             </canvas>
         </div>
         <div id="container-gameover" class="container hidden">
-
+            <div class="layout-subpage">
+                <h1>El Pollo Loco</h1>
+                <div class="container-img">
+                    <img src="./img/You won, you lost/Game Over.png"/>
+                </div>
+                <div class="btn-sub btn-restart" onclick="">
+                    RESTART
+                </div>
+                <div class="btn-sub btn-back" onclick="navigateTo('start')">
+                    BACK
+                </div>
+            </div>
         </div>
         <div id="container-settings" class="container hidden">
             <div class="layout-subpage">
                 <h2>- SETTINGS -</h2>
-                <div class="layout-line settings-line">
-                    <div>
-                        <img src="./img/icons/music.svg">
-                    </div> 
-                    <span>MUSIC</span>
-                    <div class="btn-chk" onclick="toggleSetting('music')">
-                        <div id="settings-music-on" class="btn-chk-btn btn-chk-on">On</div>
-                        <div id="settings-music-off" class="btn-chk-btn btn-chk-off hidden">Off</div>
+                <div class="layout-settings">
+                    <div class="layout-line settings-line">
+                        <div>
+                            <img src="./img/icons/music.svg">
+                        </div> 
+                        <span>MUSIC</span>
+                        <div class="btn-chk" onclick="toggleSetting('music')">
+                            <div id="settings-music-on" class="btn-chk-btn btn-chk-on">On</div>
+                            <div id="settings-music-off" class="btn-chk-btn btn-chk-off hidden">Off</div>
+                        </div>
+                    </div>
+                    <div class="layout-line settings-line">
+                        <div>
+                            <img src="./img/icons/sound.svg">
+                        </div> 
+                        <span>SOUNDS</span>
+                        <div class="btn-chk" onclick="toggleSetting('sound')">
+                            <div id="settings-sound-on" class="btn-chk-btn btn-chk-on">On</div>
+                            <div id="settings-sound-off" class="btn-chk-btn btn-chk-off hidden">Off</div>
+                        </div>
                     </div>
                 </div>
-                <div class="layout-line settings-line">
-                    <div>
-                        <img src="./img/icons/sound.svg">
-                    </div> 
-                    <span>SOUNDS</span>
-                    <div class="btn-chk" onclick="toggleSetting('sound')">
-                        <div id="settings-sound-on" class="btn-chk-btn btn-chk-on">On</div>
-                        <div id="settings-sound-off" class="btn-chk-btn btn-chk-off hidden">Off</div>
-                    </div>
-                </div>
-                <div class="btn-sub" onclick="navigateTo('start')">
+                <div class="btn-sub btn-back" onclick="navigateTo('start')">
                     BACK
                 </div>
             </div>
@@ -115,32 +142,34 @@
         <div id="container-help" class="container hidden">
             <div class="layout-subpage">
                 <h2>- HELP -</h2>
-                <div class="layout-line">
-                    <div class="btn-kbd">
-                        <img src="./img/icons/kbd-left.svg">
-                    </div> MOVE LEFT
+                <div class="layout-help">
+                    <div class="layout-line">
+                        <div class="btn-kbd">
+                            <img src="./img/icons/kbd-left.svg">
+                        </div> MOVE LEFT
+                    </div>
+                    <div class="layout-line">
+                        <div class="btn-kbd">
+                            <img src="./img/icons/kbd-right.svg">
+                        </div> MOVE RIGHT
+                    </div>
+                    <div class="layout-line">
+                        <div class="btn-kbd">
+                            <img src="./img/icons/kbd-up.svg">
+                        </div> JUMP
+                    </div>
+                    <div class="layout-line">
+                        <div class="btn-kbd">
+                            <img src="./img/icons/kbd-space.svg">
+                        </div> THROW BOTTLE
+                    </div>
+                    <div class="layout-line">
+                        <div class="btn-kbd">
+                            P
+                        </div> PAUSE GAME
+                    </div>
                 </div>
-                <div class="layout-line">
-                    <div class="btn-kbd">
-                        <img src="./img/icons/kbd-right.svg">
-                    </div> MOVE RIGHT
-                </div>
-                <div class="layout-line">
-                    <div class="btn-kbd">
-                        <img src="./img/icons/kbd-up.svg">
-                    </div> JUMP
-                </div>
-                <div class="layout-line">
-                    <div class="btn-kbd">
-                        <img src="./img/icons/kbd-space.svg">
-                    </div> THROW BOTTLE
-                </div>
-                <div class="layout-line">
-                    <div class="btn-kbd">
-                        P
-                    </div> PAUSE GAME
-                </div>
-                <div class="btn-sub" onclick="navigateTo('start')">
+                <div class="btn-sub btn-back" onclick="navigateTo('start')">
                     BACK
                 </div>
             </div>
@@ -165,7 +194,7 @@
                     <br>
                     E-Mail: <a href="mailto:mgiesigamer@gmail.com">mgiesigamer@gmail.com</a>
                 </div> 
-                <div class="btn-sub" onclick="navigateTo('start')">
+                <div class="btn-sub btn-back" onclick="navigateTo('start')">
                     BACK
                 </div>
             </div>
