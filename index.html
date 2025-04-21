@@ -31,8 +31,11 @@
     <script src="models/background-object.class.js"></script>
     <script src="models/coin.class.js"></script>
     <script src="models/bottle.class.js"></script>
+    <script src="models/door.class.js"></script>
     <script src="models/level.class.js"></script>
     <script src="levels/level1.js"></script>
+    <script src="levels/level2.js"></script>
+    <script src="levels/level3.js"></script>
     <script src="js/game.js"></script>
     <script src="js/nav.js"></script>
     <script src="js/settings.js"></script>
@@ -75,13 +78,13 @@
             <div class="layout-subpage">
                 <h2>- SELECT LEVEL -</h2>
                 <div class="layout-levels">
-                    <div class="level" onclick="setLevel('easy')">
+                    <div class="level" onclick="setGameLevel('easy')">
                         EASY
                     </div>
-                    <div class="level" onclick="setLevel('medium')">
+                    <div class="level" onclick="setGameLevel('medium')">
                         MEDIUM
                     </div>
-                    <div class="level" onclick="setLevel('hard')">
+                    <div class="level" onclick="setGameLevel('hard')">
                         HARD
                     </div>
                 </div> 
@@ -90,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <div id="container-game" class="container hidden">
+        <div id="container-game" class="container container-canvas hidden">
             <canvas id="canvas-game" class="canvas-game" width="720" height="480">
 
             </canvas>
@@ -101,11 +104,36 @@
                 <div class="container-img">
                     <img src="./img/You won, you lost/Game Over.png"/>
                 </div>
-                <div class="btn-sub btn-restart" onclick="">
+                <div class="btn-sub btn-restart" onclick="restartGame()">
                     RESTART
                 </div>
                 <div class="btn-sub btn-back" onclick="navigateTo('start')">
                     BACK
+                </div>
+            </div>
+        </div>
+        <div id="container-gamewon" class="container hidden">
+            <div class="layout-subpage">
+                <h1>El Pollo Loco</h1>
+                <div class="container-img">
+                    <img src="./img/You won, you lost/You won.png"/>
+                </div>
+                <div class="btn-sub btn-restart" onclick="restartGame()">
+                    RESTART
+                </div>
+                <div class="btn-sub btn-back" onclick="navigateTo('start')">
+                    BACK
+                </div>
+            </div>
+        </div>
+        <div id="container-nextlevel" class="container hidden">
+            <div class="layout-subpage">
+                <h1 id="nextlevel_text">Level 1</h1>
+                <div class="container-img">
+                    <img src="./img/You won, you lost/Next_Level.png"/>
+                </div>
+                <div class="btn-sub btn-back" onclick="world.nextLevel()">
+                    GO
                 </div>
             </div>
         </div>

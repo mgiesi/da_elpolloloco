@@ -57,7 +57,9 @@ class Coin extends MovableObject {
     }
 
     collected() {
-        this.audioCollected.play();
+        if (this.world.playSounds) {
+            this.audioCollected.play();
+        }
         this.setVisible(false);
     }
 }

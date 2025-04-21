@@ -4,14 +4,24 @@ class Level {
     backgroundObjects;
     coins;
     bottles;
+    door;
     levelEndX = 700;
+    world;
 
-    constructor(enemies, clouds, backgroundObjects, coins, bottles, levelEndX) {
-        this.enemies = enemies;
-        this.clouds = clouds;
-        this.backgroundObjects = backgroundObjects;
-        this.coins = coins;
-        this.bottles = bottles;
-        this.levelEndX = levelEndX;
+    constructor() {
+    }
+
+    canMoveRight(x) {
+        if (this.door.isClosed() && x >= (this.door.x + (this.door.width/4))) {
+            return false;
+        }
+
+        return x < this.levelEndX;
+    }
+
+    checkLevelEndReached(x) {
+        if (x >= this.levelEndX) {
+            showNextLevelScreen();
+        }
     }
 }

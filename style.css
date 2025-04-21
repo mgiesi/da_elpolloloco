@@ -101,6 +101,11 @@ h3 {
     overflow: hidden;
 }
 
+.container-canvas {
+    justify-content: center;
+    align-items: center;
+}
+
 .container h1,
 .container h2,
 .container h3 {

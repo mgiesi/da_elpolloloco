@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let gameLevel;
 
 function init() {
     navigateTo('splashscreen');
@@ -13,9 +14,17 @@ function initGame() {
     initSettings();
 }
 
-function setLevel(level) {
+function setGameLevel(level) {
+    gameLevel = level;
+    world.character.resetEnergy();
+    world.startGame(1, level);
     navigateTo('game');
-    world.startGame(level);
+}
+
+function restartGame() {
+    world.character.resetEnergy();
+    world.startGame(1, gameLevel);
+    navigateTo('game');
 }
 
 function checkOrientation() {

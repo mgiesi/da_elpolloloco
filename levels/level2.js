@@ -1,4 +1,4 @@
-class Level1 extends Level
+class Level2 extends Level
 {
     enemies = [
         new ChickenSmall(),
@@ -11,12 +11,6 @@ class Level1 extends Level
         new Cloud()
     ];
     backgroundObjects = [
-        
-        new BackgroundObject('./img/5_background/layers/air.png', -719),
-        new BackgroundObject('./img/5_background/layers/3_third_layer/2.png', -719),
-        new BackgroundObject('./img/5_background/layers/2_second_layer/2.png', -719),
-        new BackgroundObject('./img/5_background/layers/1_first_layer/2.png', -719),
-
         new BackgroundObject('./img/5_background/layers/air.png', 0),
         new BackgroundObject('./img/5_background/layers/3_third_layer/1.png', 0),
         new BackgroundObject('./img/5_background/layers/2_second_layer/1.png', 0),
@@ -64,5 +58,5 @@ class Level1 extends Level
     bottles = [
         new Bottle(380, 320)
     ];
-    levelEndX = 719*5;
+    levelEndX = 719*5+600;
 }

@@ -23,3 +23,13 @@ function showLandscapeInfo() {
 function hideLandscapeInfo() {
     navigateTo(currentContainer);
 }
+
+function showNextLevelScreen() {
+    world.stopGame();    
+    if (world.levelIdx >= 3) {
+        navigateTo('gamewon');
+    } else {
+        document.getElementById('nextlevel_text').innerHTML = "Level " + (world.levelIdx + 1);
+        navigateTo('nextlevel');
+    }
+}

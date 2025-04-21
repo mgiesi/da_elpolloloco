@@ -9,6 +9,9 @@ class Character extends MovableObject {
     energy = 1000;
 
     audioWalk;
+    audioSleep;
+
+    lastKeyPress;
 
     offset = {
         top: 100,
@@ -28,6 +31,19 @@ class Character extends MovableObject {
         './img/2_character_pepe/1_idle/idle/I-8.png',
         './img/2_character_pepe/1_idle/idle/I-9.png',
         './img/2_character_pepe/1_idle/idle/I-10.png'
+    ];
+
+    IMAGES_SLEEP = [
+        './img/2_character_pepe/1_idle/long_idle/I-11.png',
+        './img/2_character_pepe/1_idle/long_idle/I-12.png',
+        './img/2_character_pepe/1_idle/long_idle/I-13.png',
+        './img/2_character_pepe/1_idle/long_idle/I-14.png',
+        './img/2_character_pepe/1_idle/long_idle/I-15.png',
+        './img/2_character_pepe/1_idle/long_idle/I-16.png',
+        './img/2_character_pepe/1_idle/long_idle/I-17.png',
+        './img/2_character_pepe/1_idle/long_idle/I-18.png',
+        './img/2_character_pepe/1_idle/long_idle/I-19.png',
+        './img/2_character_pepe/1_idle/long_idle/I-20.png'
     ];
 
     IMAGES_WALK = [
@@ -70,17 +86,31 @@ class Character extends MovableObject {
     constructor() {
         super().loadImage(this.IMAGES_WALK[0])
         this.loadImages('idle', this.IMAGES_IDLE);
+        this.loadImages('sleep', this.IMAGES_SLEEP);
         this.loadImages('walk', this.IMAGES_WALK);
         this.loadImages('jump', this.IMAGES_JUMP);
         this.loadImages('dead', this.IMAGES_DEAD);
         this.loadImages('hurt', this.IMAGES_HURT);
         this.audioWalk = new Audio('./audio/walk.mp3');
+        this.audioSleep = new Audio('./audio/sleep.mp3');
         this.groundY = 480 - this.height - 50;
-        this.y = this.groundY;
+        this.y = this.groundY;  
+    }
+
+    init() {
+        this.coins = 0;
+        this.bottles = 0;
+        this.setImgType('idle');
+        this.lastKeyPress = Date.now();
+        this.x = 0;
 
         this.move();
         this.animate();
         this.gravity();
+    }
+
+    resetEnergy() {
+        this.energy = 1000;
     }
 
     gravity() {
@@ -106,19 +136,26 @@ class Character extends MovableObject {
             if (this.isDead()) {
                 return;
             }
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
+            if (this.world.keyboard.RIGHT && this.world.level.canMoveRight(this.x)) {
                 this.mirrorY = false;
-                this.audioWalk.play();
+                if (this.world.playSounds) {
+                    this.audioWalk.play();
+                }
                 this.moveRight();
             } else if (this.world.keyboard.LEFT && this.x > 0) {
                 this.mirrorY = true;
-                this.audioWalk.play();
+                if (this.world.playSounds) {
+                    this.audioWalk.play();
+                }
                 this.moveLeft();
             } else {
                 this.audioWalk.pause();
                 this.audioWalk.currentTime = 0;
             }
-            this.world.camera_x = -this.x + 100;
+            if (Math.abs(this.world.camera_x) < this.world.level.door.x + 100) {
+                this.world.camera_x = -this.x + 100;
+            }
+            
         }, 1000/60);
     }
 
@@ -136,15 +173,22 @@ class Character extends MovableObject {
                 }
             }
             else if (this.isHurt()) {
+                this.resetSleep();
                 this.setImgType('hurt');
                 if (this.displayNextImageOnce()) {
                     this.isHurtAnimation = false;
                 }
             } else if (!this.isJumpAnimation) {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                    this.resetSleep();
                     this.setImgType('walk');
                 } else {
-                    this.setImgType('idle');
+                    if (Date.now() - this.lastKeyPress > 2000) {
+                        this.setSleep();
+                        this.setImgType('sleep');
+                    } else {
+                        this.setImgType('idle');
+                    }
                 } 
                 this.displayNextImage(); 
             }
@@ -157,6 +201,7 @@ class Character extends MovableObject {
                 return;
             }
             if (this.isJumpAnimation) {
+                this.resetSleep();
                 this.setImgType('jump');
                 this.displayNextImage()
             } 
@@ -182,10 +227,32 @@ class Character extends MovableObject {
         let bx3 = (this.x + this.offset.left) >= (obj.x + obj.offset.left);
         let bx4 = (this.x + this.offset.left) <= (obj.x + obj.width - obj.offset.right);
         let by1 = (this.y + this.height + this.offset.bottom) >= obj.y + obj.offset.top;
-        let by2 = (this.y + this.height + this.offset.bottom) <= (obj.y + obj.offset.top + 20);
+        let by2 = (this.y + this.height + this.offset.bottom) <= (obj.y + obj.offset.top + 30);
         return obj.visible &&
                !obj.isDead() && 
                this.speedY < 0 &&
                ((bx1 && bx2) || (bx3 && bx4)) && by1 && by2;
+    }
+
+    setSleep() {
+        if (this.world.playSounds && this.audioSleep.paused) {
+            this.audioSleep.currentTime = 0.5;
+            this.audioSleep.play();
+        }
+    }
+
+    resetSleep() {
+        this.lastKeyPress = Date.now();
+        if (this.world.playSounds) {
+            this.audioSleep.pause();
+        }
+    }
+
+    hit(hitpoints) {
+        super.hit(hitpoints);
+        if (this.energy < 0) {
+            this.audioSleep.pause();
+            this.audioWalk.pause();
+        }
     }
 }

@@ -33,7 +33,14 @@ class Chicken extends Enemy {
             if (this.isDead()) {
                 return;
             }
-            this.moveLeft();
+            if (this.world.character.x < this.x) {
+                this.mirrorY = false;
+                this.moveLeft();
+            } else {
+                this.mirrorY = true;
+                this.moveRight();
+            }
+            
             if (this.x < -this.width) {
                 this.x = 720;
             }
@@ -42,6 +49,8 @@ class Chicken extends Enemy {
 
     attacked() {
         this.audioAttack.currentTime = 2.5;
-        this.audioAttack.play();
+        if (this.world.playSounds) {
+            this.audioAttack.play();
+        }
     }
 }

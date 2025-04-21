@@ -11,6 +11,8 @@ class World {
     audioBackground = new Audio('./audio/backgroundmusic.mp3');
 
     level;
+    levelIdx;
+    difficulty;
 
     pause = false;
     lastPauseKey = false;
@@ -56,8 +58,11 @@ class World {
         stopIntervals();
     }
 
-    startGame(difficulty) {
-        this.setLevel(level1, difficulty);
+    startGame(levelIdx, difficulty) {
+        this.difficulty = difficulty;
+        this.camera_x = 0;
+        this.setGameObjects();
+        this.setLevel(levelIdx);
         this.setWorld();
         this.draw();
         this.checkCollisions();
@@ -65,10 +70,34 @@ class World {
         this.ingame = true;
     }
 
-    setLevel(level, difficulty) {
-        this.level = level;
+    setGameObjects() {
+        this.character.init();
+    }
+
+    setLevel(levelIdx) {
+        this.levelIdx = levelIdx;
+        switch (levelIdx) {
+            case 1:
+                this.level = new Level1();
+                break;
+            case 2:
+                this.level = new Level2();
+                break;
+            case 3:
+                this.level = new Level3();
+                break;
+        }
+        this.statusBarCoins.setActValue(this.character.coins);
         this.statusBarCoins.setMaxValue(this.level.coins.length);
+        this.statusBarBottles.setActValue(this.character.bottles);
         this.statusBarBottles.setMaxValue(this.level.bottles.length);
+        this.statusBarEnergy.setActValue(this.character.energy);
+    }
+
+    nextLevel() {
+        this.levelIdx++;
+        this.startGame(this.levelIdx);
+        navigateTo('game');
     }
 
     setWorld() {
@@ -76,6 +105,10 @@ class World {
         this.statusBarEnergy.world = this;
         this.setWorldToObjects(this.level.enemies);
         this.setWorldToObjects(this.level.clouds);
+        this.setWorldToObjects(this.level.coins);
+        this.setWorldToObjects(this.level.bottles);
+        this.level.world = this;
+        this.level.door.world = this;
     }
 
     setWorldToObjects(objects) {
@@ -94,7 +127,9 @@ class World {
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjectsToGame(this.level.backgroundObjects);
+        this.addObjectToGame(this.level.door);
         this.addObjectToGame(this.character);
+        this.level.door.displaySecondPart(this.ctx);
         this.addObjectsToGame(this.level.enemies);
         this.addObjectsToGame(this.level.clouds);
         this.addObjectsToGame(this.level.coins);
@@ -155,6 +190,8 @@ class World {
                     this.statusBarBottles.setActValue(this.character.bottles);
                 }
             });
+            this.level.door.checkState();
+            this.level.checkLevelEndReached(this.character.x);
         }, 1000/60);
     }
     
