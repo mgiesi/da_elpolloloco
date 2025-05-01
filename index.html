@@ -137,6 +137,20 @@
                 </div>
             </div>
         </div>
+        <div id="container-pause" class="container hidden">
+            <div class="layout-subpage">
+                <h1>- PAUSE -</h1>
+                <div class="container-img">
+                    <img src="./img/You won, you lost/Pause.png"/>
+                </div>
+                <div class="btn-sub btn-restart" onclick="world.stopGame();navigateTo('start')">
+                    QUIT
+                </div>
+                <div class="btn-sub btn-back" onclick="world.resumeGame()">
+                    CONTINUE
+                </div>
+            </div>
+        </div>
         <div id="container-settings" class="container hidden">
             <div class="layout-subpage">
                 <h2>- SETTINGS -</h2>

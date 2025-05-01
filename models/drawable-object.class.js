@@ -5,8 +5,10 @@ class DrawableObject {
     height = 100;
     img;
     imgCache = {};
+    imgTimeCache = {};
     currentImg = 0;
     currentImgType;
+    currentImgTime = 0;
     animationDone;
     world;
 
@@ -17,16 +19,21 @@ class DrawableObject {
         this.img.src = path;
     }
 
-    loadImages(type, arr) {
+    loadImages(type, arr, time) {
         this.imgCache[type] = [];
         arr.forEach((path) => {
             let img = new Image();
             img.src = path;
             this.imgCache[type].push(img);
+            this.imgTimeCache[type] = time;
         });
     }
 
     displayNextImage() {
+        if (!this.checkNextImage()) {
+            return;
+        }
+
         if (this.currentImgType !== undefined) {
             this.img = this.imgCache[this.currentImgType][this.currentImg];
             this.currentImg++;
@@ -37,6 +44,10 @@ class DrawableObject {
     }
 
     displayNextImageOnce() {
+        if (!this.checkNextImage()) {
+            return;
+        }
+
         this.img = this.imgCache[this.currentImgType][this.currentImg];
         this.currentImg++;
         if (this.currentImg >= this.imgCache[this.currentImgType].length) {
@@ -48,8 +59,25 @@ class DrawableObject {
         return false;
     }
 
+    checkNextImage() {
+        //console.log(this.currentImgTime + " (" + this.imgTimeCache[this.currentImgType] + ")");        
+        if (this.currentImgTime < 0) {
+            this.currentImgTime = 0;
+            return true;
+        } else {
+            this.currentImgTime += ANIMATION_INTERVAL;
+            if (this.currentImgTime < this.imgTimeCache[this.currentImgType]) {
+                return false;
+            }
+        }
+
+        this.currentImgTime -= this.imgTimeCache[this.currentImgType];
+        return true;
+    }
+
     setImgType(imgType) {
         if (this.currentImgType != imgType) {
+            this.currentImgTime = -1;
             this.currentImg = 0;
         }
         this.currentImgType = imgType;

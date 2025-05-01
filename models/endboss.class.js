@@ -18,7 +18,7 @@ class Endboss extends Enemy {
 
     constructor(x) {
         super().loadImage(this.IMAGES_ALERT[0])
-        this.loadImages('alert', this.IMAGES_ALERT);
+        this.loadImages('alert', this.IMAGES_ALERT, 150);
 
         this.x = x;
         this.y = 480 - this.height - 35;
@@ -29,6 +29,6 @@ class Endboss extends Enemy {
     animate() {
         setStoppableInterval( () => {
             this.displayNextImage();
-        }, 150);      
+        }, ANIMATION_INTERVAL);      
     }
 }

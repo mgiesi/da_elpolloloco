@@ -16,14 +16,15 @@ class ChickenSmall extends Chicken {
 
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
-        this.loadImages('walk', this.IMAGES_WALKING);
-        this.loadImages('dead', this.IMAGES_DEAD);
+        this.loadImages('walk', this.IMAGES_WALKING, 150);
+        this.loadImages('dead', this.IMAGES_DEAD, 150);
 
         this.audioAttack = new Audio('./audio/chickenattack.mp3');
 
         this.x = 500 + Math.random() * 300;
         this.y = 480 - this.height - 60;
 
+        this.move();
         this.animate();
     }
 

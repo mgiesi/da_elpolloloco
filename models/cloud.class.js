@@ -18,6 +18,6 @@ class Cloud extends MovableObject {
                 return;
             }
             this.moveLeft();
-        }, 1000/60);
+        }, ANIMATION_INTERVAL);
     }
 }

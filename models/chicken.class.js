@@ -12,20 +12,7 @@ class Chicken extends Enemy {
         super();
     }
 
-    animate() {
-        setStoppableInterval( () => {
-            if (!this.world || !this.world.isRunning()) {
-                return;
-            }
-            if (this.isDead()) {
-                this.setImgType('dead');
-                this.displayNextImageOnce();
-            } else {
-                this.setImgType('walk');
-                this.displayNextImage();
-            }            
-        }, 150);
-        
+    move() {
         setStoppableInterval(() => {
             if (!this.world || !this.world.isRunning()) {
                 return;
@@ -44,7 +31,22 @@ class Chicken extends Enemy {
             if (this.x < -this.width) {
                 this.x = 720;
             }
-        }, 1000 / 60);  
+        }, ANIMATION_INTERVAL);
+    }
+
+    animate() {
+        setStoppableInterval( () => {
+            if (!this.world || !this.world.isRunning()) {
+                return;
+            }
+            if (this.isDead()) {
+                this.setImgType('dead');
+                this.displayNextImageOnce();
+            } else {
+                this.setImgType('walk');
+                this.displayNextImage();
+            }            
+        }, ANIMATION_INTERVAL);
     }
 
     attacked() {

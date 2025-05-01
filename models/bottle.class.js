@@ -31,8 +31,8 @@ class Bottle extends MovableObject {
 
     constructor(x, y) {
         super().loadImage(this.IMAGES_BOTTLE[0]);
-        this.loadImages('bottle', this.IMAGES_BOTTLE);
-        this.loadImages('splash', this.IMAGES_SPLASH);
+        this.loadImages('bottle', this.IMAGES_BOTTLE, 150);
+        this.loadImages('splash', this.IMAGES_SPLASH, 150);
 
         this.audioCollected = new Audio('./audio/bottle.mp3');
 
@@ -48,7 +48,7 @@ class Bottle extends MovableObject {
                 return;
             }
             this.displayNextImage();
-        }, 150);
+        }, ANIMATION_INTERVAL);
     }
 
     collected() {

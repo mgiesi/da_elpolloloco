@@ -16,6 +16,7 @@ class World {
 
     pause = false;
     lastPauseKey = false;
+    lastEscapeKey = false;
     ingame = false;
 
     playSounds;
@@ -192,14 +193,22 @@ class World {
             });
             this.level.door.checkState();
             this.level.checkLevelEndReached(this.character.x);
-        }, 1000/60);
+        }, ANIMATION_INTERVAL);
     }
     
     checkPauseGame() {
-        if (this.keyboard.PAUSE && !this.lastPauseKey) {
-            this.pause = !this.pause;
+        if ((this.keyboard.PAUSE && !this.lastPauseKey && !this.pause) ||
+            (this.keyboard.ESCAPE && !this.lastEscapeKey && !this.pause) ) {
+            this.pause = true;
+            navigateTo('pause');
         }
 
         this.lastPauseKey = this.keyboard.PAUSE;
+        this.lastEscapeKey = this.keyboard.ESCAPE;
+    }
+
+    resumeGame() {
+        this.pause = false;
+        navigateTo('game');
     }
 }

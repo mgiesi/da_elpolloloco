@@ -45,7 +45,7 @@ class Coin extends MovableObject {
                     this.scaleUp = true;
                 }
             }
-        }, 1000/60);        
+        }, ANIMATION_INTERVAL);        
     }
 
     move() {
@@ -53,7 +53,7 @@ class Coin extends MovableObject {
             this.x = this.centerX - this.width/2;
             this.y = this.centerY - this.height/2;
             this.height = this.width;
-        }, 1000/60);  
+        }, ANIMATION_INTERVAL);  
     }
 
     collected() {
