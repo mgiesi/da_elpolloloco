@@ -55,7 +55,7 @@ class DrawableObject {
             this.animationDone = true;
             return true;
         }
-        this.animatoinDone = false;
+        this.animationDone = false;
         return false;
     }
 

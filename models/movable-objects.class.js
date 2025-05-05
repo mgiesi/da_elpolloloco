@@ -2,6 +2,7 @@ class MovableObject extends DrawableObject {
     
     speed;
     speedY;
+    speedX;
     groundY;
     acceleration;
     mirrorY = false;
@@ -80,5 +81,5 @@ class MovableObject extends DrawableObject {
         if (this.y >= this.groundY && !this.world.keyboard.UP) {
             this.isJumping = false;
         }
-    }
+    }    
 }

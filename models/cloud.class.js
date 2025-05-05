@@ -2,13 +2,13 @@ class Cloud extends MovableObject {
     y = 20;
     width = 500;
     height = 250;
-    speed = 0.1;
+    speed = 0.8;
 
-    constructor() {
-        super().loadImage('./img/5_background/layers/4_clouds/1.png')
+    constructor(x, imgIdx) {
+        super().loadImage('./img/5_background/layers/4_clouds/' + imgIdx + '.png')
 
-        this.x = Math.random() * 500;
-
+        this.x = x;
+        
         this.move();
     }
 
@@ -18,6 +18,9 @@ class Cloud extends MovableObject {
                 return;
             }
             this.moveLeft();
+            if (this.x < -this.width) {
+                this.x = this.world.level.levelEndX + this.width;
+            }
         }, ANIMATION_INTERVAL);
     }
 }

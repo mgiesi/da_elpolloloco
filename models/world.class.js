@@ -174,28 +174,39 @@ class World {
                 } else if (this.character.isColliding(enemy)) {
                     this.character.hit(enemy.hitpoints);
                     enemy.attacked();
-                    this.statusBarEnergy.setActValue(this.character.energy);
                 }
             });
             this.level.coins.forEach((coin) => {
                 if (this.character.isColliding(coin)) {
                     this.character.addCoin();
                     coin.collected();
-                    this.statusBarCoins.setActValue(this.character.coins);
                 }
             });
             this.level.bottles.forEach((bottle) => {
-                if (this.character.isColliding(bottle)) {
+                if (bottle.isIdle() && this.character.isColliding(bottle)) {
                     this.character.addBottle();
                     bottle.collected();
-                    this.statusBarBottles.setActValue(this.character.bottles);
+                } else if (bottle.isThrown()) {
+                    this.level.enemies.forEach((enemy) => {
+                        if (enemy.isColliding(bottle)) {
+                            enemy.hit(bottle.hitpoints);
+                            bottle.splash();
+                        }
+                    });
                 }
             });
+            this.updateStatusBar();
             this.level.door.checkState();
             this.level.checkLevelEndReached(this.character.x);
         }, ANIMATION_INTERVAL);
     }
     
+    updateStatusBar() {
+        this.statusBarBottles.setActValue(this.character.bottles);
+        this.statusBarCoins.setActValue(this.character.coins);
+        this.statusBarEnergy.setActValue(this.character.energy);
+    }
+
     checkPauseGame() {
         if ((this.keyboard.PAUSE && !this.lastPauseKey && !this.pause) ||
             (this.keyboard.ESCAPE && !this.lastEscapeKey && !this.pause) ) {

@@ -5,7 +5,16 @@ class Bottle extends MovableObject {
     centerY;
     hitpoints = 10;
 
+    speedY;
+
+    initX;
+    initY;
+
     audioCollected;
+    audioSplash;
+    audioThrow;
+
+    state;
 
     IMAGES_BOTTLE = [
         './img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
@@ -30,16 +39,30 @@ class Bottle extends MovableObject {
     };
 
     constructor(x, y) {
-        super().loadImage(this.IMAGES_BOTTLE[0]);
+        super();
         this.loadImages('bottle', this.IMAGES_BOTTLE, 150);
-        this.loadImages('splash', this.IMAGES_SPLASH, 150);
+        this.loadImages('splash', this.IMAGES_SPLASH, 100);
 
         this.audioCollected = new Audio('./audio/bottle.mp3');
+        this.audioThrow = new Audio('./audio/throw.mp3');
+        this.audioSplash = new Audio('./audio/splash.mp3');
+        this.initX = x;
+        this.initY = y;
 
-        this.x = x;
-        this.y = y;
-
+        this.initBottle();
         this.animate();
+        this.gravity();
+    }
+
+    initBottle() {
+        this.loadImage(this.IMAGES_BOTTLE[0]);
+        this.acceleration = 0.5;
+        this.animationDone = false;
+        this.currentImgType = undefined;
+        this.state = 'idle';
+        this.x = this.initX;
+        this.y = this.initY;
+        this.groundY = 480 - this.height - 25;
     }
 
     animate() {
@@ -47,7 +70,14 @@ class Bottle extends MovableObject {
             if (!this.world || !this.world.isRunning()) {
                 return;
             }
-            this.displayNextImage();
+            if (this.state === 'splash') {
+                this.displayNextImageOnce();
+                if (this.animationDone) {
+                    this.initBottle();
+                }
+            } else {                
+                this.displayNextImage();
+            }
         }, ANIMATION_INTERVAL);
     }
 
@@ -56,5 +86,67 @@ class Bottle extends MovableObject {
             this.audioCollected.play();
         }
         this.setVisible(false);
+        this.state = 'collected';
     }
+
+    isIdle() {
+        return this.state === 'idle';
+    }
+
+    isThrown() {
+        return this.state === 'thrown';
+    }
+
+    gravity() {
+        setStoppableInterval( () => {
+            if (!this.world || !this.world.isRunning()) {
+                return;
+            }
+            if (this.state === 'collected' && this.world.keyboard.SPACE) {
+                this.throw();
+            }
+            if (this.state === 'thrown') {
+                this.gravityFly();
+            }
+        }, ANIMATION_INTERVAL);
+    }
+
+    throw() {
+        this.world.character.bottles--;
+        this.speedY = 8;
+        this.x = world.character.x + this.world.character.width/2;
+        this.y = world.character.y + 75;
+        this.setVisible(true);
+        this.state = 'thrown';
+        this.setImgType('bottle');
+        if (this.world.playSounds) {
+            this.audioThrow.play();
+        }
+    }
+
+    splash() {
+        this.state = 'splash'
+        this.setImgType('splash');
+        if (this.world.playSounds) {
+            this.audioSplash.currentTime = 0.5;
+            this.audioSplash.play();
+        }
+    }
+
+    gravityFly() {
+        if (this.state !== 'thrown') {
+            return;
+        }
+
+        if (this.y < this.groundY || this.speedY > 0) {
+            this.y -= this.speedY;
+            this.speedY -= this.acceleration;
+        }
+
+        if (this.y >= this.groundY) {
+            this.splash();
+        } else {
+            this.x += 8;
+        }
+    }  
 }

@@ -105,7 +105,6 @@ class Character extends MovableObject {
         this.setImgType('idle');
         this.lastKeyPress = Date.now();
         this.x = 0;
-
         this.move();
         this.animate();
         this.gravity();

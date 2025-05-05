@@ -14,14 +14,14 @@ class ChickenNormal extends Chicken {
         './img/3_enemies_chicken/chicken_normal/2_dead/dead.png',
     ];
 
-    constructor() {
+    constructor(x) {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.loadImages('walk', this.IMAGES_WALKING, 150);
         this.loadImages('dead', this.IMAGES_DEAD, 150);
 
         this.audioAttack = new Audio('./audio/chickenattack.mp3');
 
-        this.x = 500 + Math.random() * 300;
+        this.x = x;
         this.y = 480 - this.height - 55;
 
         this.move();

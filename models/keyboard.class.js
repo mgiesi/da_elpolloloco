@@ -25,7 +25,7 @@ class Keyboard {
             case 'ArrowDown':
                 this.DOWN = true;
                 break;
-            case 'Space':
+            case ' ':              
                 this.SPACE = true;
                 break;
             case 'Escape':
@@ -52,7 +52,7 @@ class Keyboard {
             case 'ArrowDown':
                 this.DOWN = false;
                 break;
-            case 'Space':
+            case ' ':  
                 this.SPACE = false;
                 break;
             case 'Escape':
