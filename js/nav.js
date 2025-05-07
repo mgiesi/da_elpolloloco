@@ -16,7 +16,7 @@ function showLandscapeInfo() {
     });
     document.getElementById('container-landscapeinfo').classList.remove('hidden');
     if (world !== undefined) {
-        world.pause = true; 
+        world.pause = true;
     }
 }
 
@@ -25,11 +25,40 @@ function hideLandscapeInfo() {
 }
 
 function showNextLevelScreen() {
-    world.stopGame();    
+    world.stopGame();
     if (world.levelIdx >= 3) {
         navigateTo('gamewon');
     } else {
         document.getElementById('nextlevel_text').innerHTML = "Level " + (world.levelIdx + 1);
         navigateTo('nextlevel');
     }
+}
+
+function enterFullscreen() {
+    const element = document.getElementById('container-game');
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+        element.msRequestFullscreen();
+    } else if (element.webkitRequestFullscreen) {  // iOS Safari
+        element.webkitRequestFullscreen();
+    }
+
+    const elementBtnEnter = document.getElementById('btn-enter-fullscreen');
+    elementBtnEnter.classList.add('hidden');
+    const elementBtnExit = document.getElementById('btn-exit-fullscreen');
+    elementBtnExit.classList.remove('hidden');
+}
+
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
+
+    const elementBtnEnter = document.getElementById('btn-enter-fullscreen');
+    elementBtnEnter.classList.remove('hidden');
+    const elementBtnExit = document.getElementById('btn-exit-fullscreen');
+    elementBtnExit.classList.add('hidden');
 }

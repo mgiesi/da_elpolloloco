@@ -5,7 +5,7 @@ class Character extends MovableObject {
     speed = 10;
     acceleration = 0.5;
     coins = 0;
-    bottles = 0;
+    bottles = [];
     energy = 1000;
 
     sleepTimeout = 5000;
@@ -14,6 +14,10 @@ class Character extends MovableObject {
     audioSleep;
 
     lastKeyPress;
+    lastSpaceState;
+
+    offset_x = 100;
+    targetOffset_x = 100;
 
     offset = {
         top: 100,
@@ -101,7 +105,7 @@ class Character extends MovableObject {
 
     init() {
         this.coins = 0;
-        this.bottles = 0;
+        this.bottles = [];
         this.setImgType('idle');
         this.lastKeyPress = Date.now();
         this.x = 0;
@@ -137,13 +141,15 @@ class Character extends MovableObject {
             if (this.isDead()) {
                 return;
             }
-            if (this.world.keyboard.RIGHT && this.world.level.canMoveRight(this.x)) {
+            let tmpMoveRight = this.world.keyboard.RIGHT && this.world.level.canMoveRight(this.x);
+            let tmpMoveLeft = this.world.keyboard.LEFT && this.x > 0;
+            if (tmpMoveRight) {
                 this.mirrorY = false;
                 if (this.world.playSounds) {
                     this.audioWalk.play();
                 }
                 this.moveRight();
-            } else if (this.world.keyboard.LEFT && this.x > 0) {
+            } else if (tmpMoveLeft) {
                 this.mirrorY = true;
                 if (this.world.playSounds) {
                     this.audioWalk.play();
@@ -153,9 +159,10 @@ class Character extends MovableObject {
                 this.audioWalk.pause();
                 this.audioWalk.currentTime = 0;
             }
-            if (Math.abs(this.world.camera_x) < this.world.level.door.x + 100) {
-                this.world.camera_x = -this.x + 100;
-            }            
+
+            if (Math.abs(this.world.camera_x) < this.world.level.door.x + 100 || tmpMoveLeft) {
+                this.world.camera_x = -this.x + this.offset_x;
+            }
         }, ANIMATION_INTERVAL);
     }
 
@@ -195,6 +202,12 @@ class Character extends MovableObject {
                 } 
                 this.displayNextImage(); 
             }
+
+            if (this.world.keyboard.SPACE && !this.lastSpaceState) {
+                   this.throwBottle();
+            }
+            this.lastSpaceState = this.world.keyboard.SPACE;
+
         }, ANIMATION_INTERVAL);        
     }
 
@@ -202,12 +215,15 @@ class Character extends MovableObject {
         this.coins++;
     }
 
-    addBottle() {
-        this.bottles++;
+    addBottle(bottle) {
+        this.bottles.push(bottle);
     }
 
     throwBottle() {
-
+        let bottle = this.bottles.pop();
+        if (bottle) {
+            bottle.throw();
+        }
     }
     
     isJumpedOn(obj) {
@@ -242,6 +258,22 @@ class Character extends MovableObject {
         if (this.energy < 0) {
             this.audioSleep.pause();
             this.audioWalk.pause();
+        }
+    }
+
+    moveRight() {
+        super.moveRight();
+        this.targetOffset_x = 100;
+        if (this.offset_x > this.targetOffset_x) {
+            this.offset_x -= this.speed/2;
+        }
+    }
+
+    moveLeft() {
+        super.moveLeft();
+        this.targetOffset_x = this.world.canvas.width - this.width - 100;
+        if (this.offset_x < this.targetOffset_x) {
+            this.offset_x += this.speed/2;
         }
     }
 }

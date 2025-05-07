@@ -41,7 +41,15 @@
     <script src="js/settings.js"></script>
 </head>
 <body onload="init()">
-    <div class="container-game">  
+    <div class="container-game">
+        <div id="container-button-overlay" class="">
+            <div class="btn-overlay" id="btn-enter-fullscreen" onclick="enterFullscreen()">
+                <img src="./img/icons/open_fullscreen.svg" alt="Enter Fullscreen">
+            </div>
+            <div class="btn-overlay hidden" id="btn-exit-fullscreen" onclick="exitFullscreen()">
+                <img src="./img/icons/close_fullscreen.svg" alt="Exit Fullscreen">
+            </div>
+        </div>
         <div id="container-splashscreen" class="container hidden">
             <h1>El Pollo Loco</h1>
             <div class="container-img">

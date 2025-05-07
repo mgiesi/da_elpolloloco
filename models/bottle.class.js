@@ -9,6 +9,7 @@ class Bottle extends MovableObject {
 
     initX;
     initY;
+    speedX;
 
     audioCollected;
     audioSplash;
@@ -102,18 +103,16 @@ class Bottle extends MovableObject {
             if (!this.world || !this.world.isRunning()) {
                 return;
             }
-            if (this.state === 'collected' && this.world.keyboard.SPACE) {
-                this.throw();
-            }
             if (this.state === 'thrown') {
                 this.gravityFly();
             }
+            this.lastSpaceState = this.world.keyboard.SPACE;
         }, ANIMATION_INTERVAL);
     }
 
     throw() {
-        this.world.character.bottles--;
         this.speedY = 8;
+        this.speedX = world.character.mirrorY ? -8 : 8;
         this.x = world.character.x + this.world.character.width/2;
         this.y = world.character.y + 75;
         this.setVisible(true);
@@ -146,7 +145,7 @@ class Bottle extends MovableObject {
         if (this.y >= this.groundY) {
             this.splash();
         } else {
-            this.x += 8;
+            this.x += this.speedX;
         }
     }  
 }

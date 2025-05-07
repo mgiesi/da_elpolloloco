@@ -1,13 +1,13 @@
 class Level1 extends Level
 {
     enemies = [
-        new ChickenSmall(700),
+        /*new ChickenSmall(700),
         new ChickenSmall(900),
         new ChickenSmall(1300),
         new ChickenNormal(1400),
         new ChickenNormal(2000),
         new ChickenSmall(2400),
-        new ChickenSmall(2600),
+        new ChickenSmall(2600),*/
     ];
     clouds = [
         new Cloud(100, 1),
@@ -19,6 +19,12 @@ class Level1 extends Level
         new Cloud(3200, 1),
     ];
     backgroundObjects = [
+
+        new BackgroundObject('./img/5_background/layers/air.png', -819),
+        new BackgroundObject('./img/5_background/layers/3_third_layer/2.png', -819),
+        new BackgroundObject('./img/5_background/layers/2_second_layer/2.png', -819),
+        new BackgroundObject('./img/5_background/layers/1_first_layer/2.png', -819),
+
         new BackgroundObject('./img/5_background/layers/air.png', -100),
         new BackgroundObject('./img/5_background/layers/3_third_layer/1.png', -100),
         new BackgroundObject('./img/5_background/layers/2_second_layer/1.png', -100),
@@ -65,8 +71,8 @@ class Level1 extends Level
     ];
     bottles = [
         new Bottle(380, 320),
-        new Bottle(800, 220),
-        new Bottle(860, 220),
+        new Bottle(800, 180),
+        new Bottle(860, 180),
         new Bottle(1600, 320),
         new Bottle(2000, 320),
     ];

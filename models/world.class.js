@@ -184,7 +184,7 @@ class World {
             });
             this.level.bottles.forEach((bottle) => {
                 if (bottle.isIdle() && this.character.isColliding(bottle)) {
-                    this.character.addBottle();
+                    this.character.addBottle(bottle);
                     bottle.collected();
                 } else if (bottle.isThrown()) {
                     this.level.enemies.forEach((enemy) => {
@@ -202,7 +202,7 @@ class World {
     }
     
     updateStatusBar() {
-        this.statusBarBottles.setActValue(this.character.bottles);
+        this.statusBarBottles.setActValue(this.character.bottles.length);
         this.statusBarCoins.setActValue(this.character.coins);
         this.statusBarEnergy.setActValue(this.character.energy);
     }
