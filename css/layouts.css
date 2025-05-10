@@ -59,17 +59,47 @@
     z-index: 1000;
 }
 
-#btn-enter-fullscreen, #btn-exit-fullscreen {
+#container-game-btns {
+    display: none;
+}
+
+@media (pointer: coarse) {
+  #container-game-btns { display: block; }
+}
+
+#btn-toggle-fullscreen {
     position: absolute;
     top: 0;
     right: 0;
     margin: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    pointer-events: auto;
 }
-
+#btn-pause {
+    position: absolute;
+    top: 0;
+    right: 80px;
+    margin: 1rem;
+}
+#btn-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 1rem;
+}
+#btn-right {
+    position: absolute;
+    bottom: 0;
+    left: 80px;
+    margin: 1rem;
+}
+#btn-jump {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 1rem;
+}
+#btn-bottle {
+    position: absolute;
+    bottom: 0;
+    right: 80px;
+    margin: 1rem;
+}

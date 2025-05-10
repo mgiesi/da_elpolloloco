@@ -126,6 +126,23 @@
     margin-left: 32px;
 }
 
+.btn-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    background-color: rgb(247, 158, 15);
+    color: rgb(0, 0, 0);
+    border-radius: 50%;
+    border: solid 4px rgb(0, 0, 0);
+    cursor: pointer;
+    font-size: 24px;
+    transition: all 200ms ease-in-out;
+    pointer-events: auto;
+    width: 40px;
+    height: 40px;
+}
+
 .impressum {
     background-color: rgb(250, 177, 60);
     border-radius: 16px;

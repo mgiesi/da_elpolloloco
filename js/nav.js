@@ -7,6 +7,16 @@ function navigateTo(page) {
     });
     document.getElementById('container-' + page).classList.remove('hidden');
     currentContainer = page;
+    toggleGameButtons();
+}
+
+function toggleGameButtons() {
+    const containerRefs = document.getElementById('container-game-btns');
+    if (currentContainer === 'game') {
+        containerRefs.classList.remove('hidden'); 
+    } else {
+        containerRefs.classList.add('hidden');
+    }
 }
 
 function showLandscapeInfo() {
@@ -34,31 +44,21 @@ function showNextLevelScreen() {
     }
 }
 
-function enterFullscreen() {
-    const element = document.getElementById('container-game');
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
-        element.msRequestFullscreen();
-    } else if (element.webkitRequestFullscreen) {  // iOS Safari
-        element.webkitRequestFullscreen();
+function toggleFullscreen() {
+    if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    } else {
+        const element = document.getElementById('container-game-wrapper');
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+            element.msRequestFullscreen();
+        } else if (element.webkitRequestFullscreen) {  // iOS Safari
+            element.webkitRequestFullscreen();
+        }
     }
-
-    const elementBtnEnter = document.getElementById('btn-enter-fullscreen');
-    elementBtnEnter.classList.add('hidden');
-    const elementBtnExit = document.getElementById('btn-exit-fullscreen');
-    elementBtnExit.classList.remove('hidden');
-}
-
-function exitFullscreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    }
-
-    const elementBtnEnter = document.getElementById('btn-enter-fullscreen');
-    elementBtnEnter.classList.remove('hidden');
-    const elementBtnExit = document.getElementById('btn-exit-fullscreen');
-    elementBtnExit.classList.add('hidden');
 }

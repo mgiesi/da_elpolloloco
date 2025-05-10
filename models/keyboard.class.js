@@ -8,7 +8,61 @@ class Keyboard {
     ESCAPE = false;
 
     constructor() {
-        
+        this.bindKeyboardKeys();
+        this.bindBtnKeys();
+    }
+
+    bindBtnKeys() {
+        document.getElementById("btn-left").addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            this.LEFT = true;
+        });
+        document.getElementById("btn-left").addEventListener("touchend", (e) => {
+            e.preventDefault();
+            this.LEFT = false;
+        });
+        document.getElementById("btn-right").addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            this.RIGHT = true;
+        });
+        document.getElementById("btn-right").addEventListener("touchend", (e) => {
+            e.preventDefault();
+            this.RIGHT = false;
+        });
+        document.getElementById("btn-jump").addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            this.UP = true;
+        });
+        document.getElementById("btn-jump").addEventListener("touchend", (e) => {
+            e.preventDefault();
+            this.UP = false;
+        });
+        document.getElementById("btn-bottle").addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            this.SPACE = true;
+        });
+        document.getElementById("btn-bottle").addEventListener("touchend", (e) => {
+            e.preventDefault();
+            this.SPACE = false;
+        });
+        document.getElementById("btn-pause").addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            this.PAUSE = true;
+        });
+        document.getElementById("btn-pause").addEventListener("touchend", (e) => {
+            e.preventDefault();
+            this.PAUSE = false;
+        });
+    }
+
+    bindKeyboardKeys() {        
+        window.addEventListener("keydown", (e) => {
+            this.keyDown(e.key);
+        });
+
+        window.addEventListener("keyup", (e) => {
+            this.keyUp(e.key);
+        });
     }
 
     keyDown(key) {
