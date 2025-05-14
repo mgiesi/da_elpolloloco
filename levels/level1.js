@@ -1,13 +1,13 @@
 class Level1 extends Level
 {
     enemies = [
-        /*new ChickenSmall(700),
+        new ChickenSmall(700),
         new ChickenSmall(900),
         new ChickenSmall(1300),
         new ChickenNormal(1400),
         new ChickenNormal(2000),
         new ChickenSmall(2400),
-        new ChickenSmall(2600),*/
+        new ChickenSmall(2600)
     ];
     clouds = [
         new Cloud(100, 1),

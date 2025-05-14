@@ -7,6 +7,7 @@ class World {
     statusBarEnergy = new StatusBar('./img/7_statusbars/1_statusbar/2_statusbar_health/blue', 20, 0, 1000, 1000);
     statusBarCoins = new StatusBar('./img/7_statusbars/1_statusbar/1_statusbar_coin/orange', 20, 50, 100, 0);
     statusBarBottles = new StatusBar('./img/7_statusbars/1_statusbar/3_statusbar_bottle/green', 20, 100, 5, 0);
+    statusBarEndboss = new StatusBar('./img/7_statusbars/2_statusbar_endboss/blue', 300, 0, 500, 0);
     
     audioBackground = new Audio('./audio/backgroundmusic.mp3');
 
@@ -92,7 +93,12 @@ class World {
         this.statusBarCoins.setMaxValue(this.level.coins.length);
         this.statusBarBottles.setActValue(this.character.bottles);
         this.statusBarBottles.setMaxValue(this.level.bottles.length);
+        this.statusBarEnergy.setMaxValue(this.character.maxenergy);
         this.statusBarEnergy.setActValue(this.character.energy);
+        if (this.level.endboss) {
+            this.statusBarEndboss.setMaxValue(this.level.endboss.maxenergy);
+            this.statusBarEndboss.setActValue(this.level.endboss.energy);
+        }
     }
 
     nextLevel() {
@@ -141,6 +147,9 @@ class World {
         this.addObjectToGame(this.statusBarEnergy);
         this.addObjectToGame(this.statusBarCoins);
         this.addObjectToGame(this.statusBarBottles);
+        if (this.level.endboss && !this.level.endboss.isIdle()) {
+            this.addObjectToGame(this.statusBarEndboss);
+        }
 
         this.checkPauseGame();
 
@@ -205,6 +214,9 @@ class World {
         this.statusBarBottles.setActValue(this.character.bottles.length);
         this.statusBarCoins.setActValue(this.character.coins);
         this.statusBarEnergy.setActValue(this.character.energy);
+        if (this.level.endboss) {
+            this.statusBarEndboss.setActValue(this.level.endboss.energy);
+        }
     }
 
     checkPauseGame() {

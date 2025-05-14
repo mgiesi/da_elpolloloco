@@ -27,10 +27,6 @@ class Chicken extends Enemy {
                 this.mirrorY = true;
                 this.moveRight();
             }
-            
-            if (this.x < -this.width) {
-                this.x = 720;
-            }
         }, ANIMATION_INTERVAL);
     }
 
@@ -54,5 +50,11 @@ class Chicken extends Enemy {
         if (this.world.playSounds) {
             this.audioAttack.play();
         }
+    }
+
+    hit(hitpoints) {
+        super.hit(hitpoints);
+        console.log('Hitted' + this.energy);
+        
     }
 }

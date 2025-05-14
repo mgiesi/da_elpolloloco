@@ -6,7 +6,6 @@ class Character extends MovableObject {
     acceleration = 0.5;
     coins = 0;
     bottles = [];
-    energy = 1000;
 
     sleepTimeout = 5000;
 
@@ -97,10 +96,8 @@ class Character extends MovableObject {
         this.loadImages('jump', this.IMAGES_JUMP, 150);
         this.loadImages('dead', this.IMAGES_DEAD, 100);
         this.loadImages('hurt', this.IMAGES_HURT, 100);
-        this.audioWalk = new Audio('./audio/walk.mp3');
-        this.audioSleep = new Audio('./audio/sleep.mp3');
-        this.groundY = 480 - this.height - 50;
-        this.y = this.groundY;  
+        this.initAudio(); 
+        this.initPosition();
     }
 
     init() {
@@ -109,13 +106,41 @@ class Character extends MovableObject {
         this.setImgType('idle');
         this.lastKeyPress = Date.now();
         this.x = 0;
+        this.offset_x = 100;
+        this.targetOffset_x = 100;
         this.move();
         this.animate();
         this.gravity();
+        this.initGameLevel();
+    }
+
+    initAudio() {        
+        this.audioWalk = new Audio('./audio/walk.mp3');
+        this.audioSleep = new Audio('./audio/sleep.mp3');
+    }
+
+    initPosition() {
+        this.groundY = 480 - this.height - 50;
+        this.y = this.groundY; 
+    }
+
+    initGameLevel() {
+        switch (gameLevel) {
+            case 'easy':
+                this.maxenergy = 300;
+                break;
+            case 'medium':
+                this.maxenergy = 200;
+                break;
+            case 'hard':
+                this.maxenergy = 100;
+                break;
+        }
+        this.energy = this.maxenergy;
     }
 
     resetEnergy() {
-        this.energy = 1000;
+        this.initGameLevel();
     }
 
     gravity() {

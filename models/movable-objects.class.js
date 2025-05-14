@@ -7,7 +7,8 @@ class MovableObject extends DrawableObject {
     acceleration;
     mirrorY = false;
 
-    energy = 100;
+    maxenergy = 100;
+    energy = this.maxenergy;
 
     isJumping;
     isJumpAnimation;

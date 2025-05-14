@@ -60,7 +60,6 @@ class DrawableObject {
     }
 
     checkNextImage() {
-        //console.log(this.currentImgTime + " (" + this.imgTimeCache[this.currentImgType] + ")");        
         if (this.currentImgTime < 0) {
             this.currentImgTime = 0;
             return true;

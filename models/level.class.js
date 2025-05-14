@@ -7,6 +7,7 @@ class Level {
     door;
     levelEndX = 700;
     world;
+    endboss;
 
     constructor() {
     }

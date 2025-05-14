@@ -151,6 +151,8 @@
 }
 
 .level {
+    display: flex;
+    flex-direction: column;
     max-width: 256px;
     max-height: 256px;
     background-color: rgb(250, 177, 60);
@@ -158,4 +160,17 @@
     border: solid 2px rgb(0, 0, 0);
     padding: 24px;
     cursor: pointer;
+}
+
+.level:nth-child(1) img {
+    width: 36px;
+    height: 36px;
+}
+.level:nth-child(2) img {
+    width: 48px;
+    height: 48px;
+}
+.level:nth-child(3) img {
+    width: 64px;
+    height: 64px;
 }
