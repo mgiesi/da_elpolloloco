@@ -169,16 +169,8 @@ class Character extends MovableObject {
             let tmpMoveRight = this.world.keyboard.RIGHT && this.world.level.canMoveRight(this.x);
             let tmpMoveLeft = this.world.keyboard.LEFT && this.x > 0;
             if (tmpMoveRight) {
-                this.mirrorY = false;
-                if (this.world.playSounds) {
-                    this.audioWalk.play();
-                }
                 this.moveRight();
             } else if (tmpMoveLeft) {
-                this.mirrorY = true;
-                if (this.world.playSounds) {
-                    this.audioWalk.play();
-                }
                 this.moveLeft();
             } else {
                 this.audioWalk.pause();
@@ -191,49 +183,79 @@ class Character extends MovableObject {
         }, ANIMATION_INTERVAL);
     }
 
+    moveRight() {
+        this.mirrorY = false;
+        if (this.world.playSounds) {
+            this.audioWalk.play();
+        }
+        super.moveRight();
+    }
+
+    moveLeft() {
+        this.mirrorY = true;
+        if (this.world.playSounds) {
+            this.audioWalk.play();
+        }
+        super.moveLeft();
+    }
+
     animate() {
         setStoppableInterval( () => {
             if (!this.world || !this.world.isRunning()) {
                 return;
             }
             if (this.isDead()) {
-                this.setImgType('dead');
-                this.displayNextImageOnce();
-                if (this.animationDone) {
-                    navigateTo('gameover');
-                    this.world.stopGame();
-                }
+                animateDead();
             } else if (this.isHurt()) {
-                this.resetSleep();
-                this.setImgType('hurt');
-                if (this.displayNextImageOnce()) {
-                    this.isHurtAnimation = false;
-                }
+                animateHurt();
             } else if (this.isJumpAnimation) {
-                this.resetSleep();
-                this.setImgType('jump');
-                this.displayNextImage()
+                animateJump();
             } else if (!this.isJumpAnimation) {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                    this.resetSleep();
-                    this.setImgType('walk');
-                } else {
-                    if (Date.now() - this.lastKeyPress > this.sleepTimeout) {
-                        this.setSleep();
-                        this.setImgType('sleep');
-                    } else {
-                        this.setImgType('idle');
-                    }
-                } 
-                this.displayNextImage(); 
+                checkAnimateJump();
             }
-
             if (this.world.keyboard.SPACE && !this.lastSpaceState) {
                    this.throwBottle();
             }
             this.lastSpaceState = this.world.keyboard.SPACE;
-
         }, ANIMATION_INTERVAL);        
+    }
+
+    animateDead() {
+        this.setImgType('dead');
+        this.displayNextImageOnce();
+        if (this.animationDone) {
+            navigateTo('gameover');
+            this.world.stopGame();
+        }
+    }
+
+    animateHurt() {
+        this.resetSleep();
+        this.setImgType('hurt');
+        if (this.displayNextImageOnce()) {
+            this.isHurtAnimation = false;
+        }
+    }
+
+    animateJump() {
+        this.resetSleep();
+        this.setImgType('jump');
+        this.displayNextImage()
+    }
+
+    checkAnimateJump() {
+        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            this.resetSleep();
+            this.setImgType('walk');
+        } else {
+            if (Date.now() - this.lastKeyPress > this.sleepTimeout) {
+                this.setSleep();
+                this.setImgType('sleep');
+            } else {
+                this.setImgType('idle');
+            }
+        } 
+        this.displayNextImage(); 
     }
 
     addCoin() {
@@ -251,6 +273,23 @@ class Character extends MovableObject {
         }
     }
     
+    /**
+     * Determines whether this entity has successfully jumped on top of the given object.
+     *
+     * @param {Object} obj - The target object to check collision against.
+     * @param {number} obj.x - The x-coordinate of the object's top-left corner.
+     * @param {number} obj.y - The y-coordinate of the object's top-left corner.
+     * @param {number} obj.width - The width of the object.
+     * @param {number} obj.height - The height of the object.
+     * @param {Object} obj.offset - Pixel offsets applied to the object's collision bounds.
+     * @param {number} obj.offset.left - Left inset from the object's x position.
+     * @param {number} obj.offset.right - Right inset from the object's right edge.
+     * @param {number} obj.offset.top - Top inset from the object's y position.
+     * @param {number} obj.offset.bottom - Bottom inset from the object's bottom edge.
+     * @param {boolean} obj.visible - Whether the object is currently visible.
+     * @param {Function} obj.isDead - Function returning true if the object is considered “dead.”
+     * @returns {boolean} True if this entity is above the object, moving downward, visible, and within the collision thresholds; otherwise false.
+     */
     isJumpedOn(obj) {
         let bx1 = (this.x + this.width - this.offset.right) >= obj.x + obj.offset.left;
         let bx2 = (this.x + this.width - this.offset.right) <= obj.x + obj.width - obj.offset.right;

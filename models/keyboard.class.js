@@ -1,3 +1,7 @@
+/**
+ * @class Keyboard
+ * @classdesc Manages user input via keyboard and touch controls for the game.
+ */
 class Keyboard {
     LEFT = false;
     RIGHT = false;
@@ -12,6 +16,10 @@ class Keyboard {
         this.bindBtnKeys();
     }
 
+    /**
+     * Binds touch event listeners to on-screen control buttons.
+     * @returns {void}
+     */
     bindBtnKeys() {
         document.getElementById("btn-left").addEventListener("touchstart", (e) => {
             e.preventDefault();
@@ -55,6 +63,10 @@ class Keyboard {
         });
     }
 
+    /**
+     * Binds native keyboard event listeners for keydown and keyup.
+     * @returns {void}
+     */
     bindKeyboardKeys() {        
         window.addEventListener("keydown", (e) => {
             this.keyDown(e.key);
@@ -65,6 +77,11 @@ class Keyboard {
         });
     }
 
+    /**
+     * Handles a keydown event by setting the corresponding flag.
+     * @param {string} key - The key value from the KeyboardEvent.
+     * @returns {void}
+     */
     keyDown(key) {
         switch (key) {
             case 'ArrowLeft':
@@ -92,6 +109,11 @@ class Keyboard {
         }
     }
 
+    /**
+     * Handles a keyup event by clearing the corresponding flag.
+     * @param {string} key - The key value from the KeyboardEvent.
+     * @returns {void}
+     */
     keyUp(key) {
         switch (key) {
             case 'ArrowLeft':

@@ -11,9 +11,17 @@ class Door extends DrawableObject {
         this.loadImages('closed', ['./img/5_background/door_closed.png']);
         this.loadImages('opened', ['./img/5_background/door_open.png']);
         this.loadImages('opened2ndPart', ['./img/5_background/door_open_2.png']);
-        this.audioOpen = new Audio('./audio/door_open.mp3');
-        this.x = x;
+        this.initAudio();
+        this.initPosition(x);
         this.close();
+    }
+
+    initAudio() {        
+        this.audioOpen = new Audio('./audio/door_open.mp3');
+    }
+
+    initPosition(x) {
+        this.x = x;
     }
 
     isClosed() {

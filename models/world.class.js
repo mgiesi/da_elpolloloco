@@ -89,6 +89,10 @@ class World {
                 this.level = new Level3();
                 break;
         }
+        this.initStatusBar();
+    }
+
+    initStatusBar() {
         this.statusBarCoins.setActValue(this.character.coins);
         this.statusBarCoins.setMaxValue(this.level.coins.length);
         this.statusBarBottles.setActValue(this.character.bottles);
@@ -177,39 +181,51 @@ class World {
             if (this.character.isDead()) {
                 return;
             }
-            this.level.enemies.forEach((enemy) => {
-                if (enemy.killByJumpOn && this.character.isJumpedOn(enemy)) {
-                    enemy.jumpedOn();
-                } else if (this.character.isColliding(enemy)) {
-                    this.character.hit(enemy.hitpoints);
-                    enemy.attacked();
-                }
-            });
-            this.level.coins.forEach((coin) => {
-                if (this.character.isColliding(coin)) {
-                    this.character.addCoin();
-                    coin.collected();
-                }
-            });
-            this.level.bottles.forEach((bottle) => {
-                if (bottle.isIdle() && this.character.isColliding(bottle)) {
-                    this.character.addBottle(bottle);
-                    bottle.collected();
-                } else if (bottle.isThrown()) {
-                    this.level.enemies.forEach((enemy) => {
-                        if (enemy.isColliding(bottle)) {
-                            enemy.hit(bottle.hitpoints);
-                            bottle.splash();
-                        }
-                    });
-                }
-            });
+            checkEnemyCollision();
+            checkCoinCollision();
+            checkBottleCollision();
             this.updateStatusBar();
             this.level.door.checkState();
             this.level.checkLevelEndReached(this.character.x);
         }, ANIMATION_INTERVAL);
     }
+
+    checkEnemyCollision() {
+        this.level.enemies.forEach((enemy) => {
+            if (enemy.killByJumpOn && this.character.isJumpedOn(enemy)) {
+                enemy.jumpedOn();
+            } else if (this.character.isColliding(enemy)) {
+                this.character.hit(enemy.hitpoints);
+                enemy.attacked();
+            }
+        });
+    }
+
+    checkCoinCollision() {
+        this.level.coins.forEach((coin) => {
+            if (this.character.isColliding(coin)) {
+                this.character.addCoin();
+                coin.collected();
+            }
+        });
+    }
     
+    checkBottleCollision() {
+        this.level.bottles.forEach((bottle) => {
+            if (bottle.isIdle() && this.character.isColliding(bottle)) {
+                this.character.addBottle(bottle);
+                bottle.collected();
+            } else if (bottle.isThrown()) {
+                this.level.enemies.forEach((enemy) => {
+                    if (enemy.isColliding(bottle)) {
+                        enemy.hit(bottle.hitpoints);
+                        bottle.splash();
+                    }
+                });
+            }
+        });
+    }
+
     updateStatusBar() {
         this.statusBarBottles.setActValue(this.character.bottles.length);
         this.statusBarCoins.setActValue(this.character.coins);

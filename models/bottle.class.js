@@ -43,16 +43,22 @@ class Bottle extends MovableObject {
         super();
         this.loadImages('bottle', this.IMAGES_BOTTLE, 150);
         this.loadImages('splash', this.IMAGES_SPLASH, 100);
-
-        this.audioCollected = new Audio('./audio/bottle.mp3');
-        this.audioThrow = new Audio('./audio/throw.mp3');
-        this.audioSplash = new Audio('./audio/splash.mp3');
-        this.initX = x;
-        this.initY = y;
-
+        this.initAudio();
+        this.initPosition(x, y);
         this.initBottle();
         this.animate();
         this.gravity();
+    }
+
+    initAudio() {        
+        this.audioCollected = new Audio('./audio/bottle.mp3');
+        this.audioThrow = new Audio('./audio/throw.mp3');
+        this.audioSplash = new Audio('./audio/splash.mp3');
+    }
+
+    initPosition(x, y) {
+        this.initX = x;
+        this.initY = y;
     }
 
     initBottle() {
@@ -72,14 +78,18 @@ class Bottle extends MovableObject {
                 return;
             }
             if (this.state === 'splash') {
-                this.displayNextImageOnce();
-                if (this.animationDone) {
-                    this.initBottle();
-                }
+                this.animateSplash();
             } else {                
                 this.displayNextImage();
             }
         }, ANIMATION_INTERVAL);
+    }
+
+    animateSplash() {
+        this.displayNextImageOnce();
+        if (this.animationDone) {
+            this.initBottle();
+        }
     }
 
     collected() {

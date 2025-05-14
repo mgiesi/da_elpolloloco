@@ -6,10 +6,12 @@ class Cloud extends MovableObject {
 
     constructor(x, imgIdx) {
         super().loadImage('./img/5_background/layers/4_clouds/' + imgIdx + '.png')
-
-        this.x = x;
-        
+        this.initPosition(x);        
         this.move();
+    }
+
+    initPosition(x) {
+        this.x = x;
     }
 
     move() {

@@ -19,17 +19,21 @@ class Coin extends MovableObject {
 
     constructor(x, y) {
         super().loadImage('./img/8_coin/coin_1.png');
-
-        this.audioCollected = new Audio('./audio/coin.mp3');
-
-        this.x = x;
-        this.y = y;
-
-        this.centerX = this.x + this.width/2;
-        this.centerY = this.y + this.height/2;
-
+        this.initAudio();
+        this.initPosition(x, y);
         this.animate();
         this.move();
+    }
+
+    initAudio() {        
+        this.audioCollected = new Audio('./audio/coin.mp3');
+    }
+
+    initPosition(x, y) {
+        this.x = x;
+        this.y = y;
+        this.centerX = this.x + this.width/2;
+        this.centerY = this.y + this.height/2;
     }
 
     animate() {
