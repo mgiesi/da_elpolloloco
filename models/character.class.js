@@ -189,6 +189,10 @@ class Character extends MovableObject {
             this.audioWalk.play();
         }
         super.moveRight();
+        this.targetOffset_x = 100;
+        if (this.offset_x > this.targetOffset_x) {
+            this.offset_x -= this.speed/2;
+        }
     }
 
     moveLeft() {
@@ -197,6 +201,10 @@ class Character extends MovableObject {
             this.audioWalk.play();
         }
         super.moveLeft();
+        this.targetOffset_x = this.world.canvas.width - this.width - 100;
+        if (this.offset_x < this.targetOffset_x) {
+            this.offset_x += this.speed/2;
+        }
     }
 
     animate() {
@@ -205,13 +213,13 @@ class Character extends MovableObject {
                 return;
             }
             if (this.isDead()) {
-                animateDead();
+                this.animateDead();
             } else if (this.isHurt()) {
-                animateHurt();
+                this.animateHurt();
             } else if (this.isJumpAnimation) {
-                animateJump();
+                this.animateJump();
             } else if (!this.isJumpAnimation) {
-                checkAnimateJump();
+                this.checkAnimateJump();
             }
             if (this.world.keyboard.SPACE && !this.lastSpaceState) {
                    this.throwBottle();
@@ -322,22 +330,6 @@ class Character extends MovableObject {
         if (this.energy < 0) {
             this.audioSleep.pause();
             this.audioWalk.pause();
-        }
-    }
-
-    moveRight() {
-        super.moveRight();
-        this.targetOffset_x = 100;
-        if (this.offset_x > this.targetOffset_x) {
-            this.offset_x -= this.speed/2;
-        }
-    }
-
-    moveLeft() {
-        super.moveLeft();
-        this.targetOffset_x = this.world.canvas.width - this.width - 100;
-        if (this.offset_x < this.targetOffset_x) {
-            this.offset_x += this.speed/2;
         }
     }
 }

@@ -181,9 +181,9 @@ class World {
             if (this.character.isDead()) {
                 return;
             }
-            checkEnemyCollision();
-            checkCoinCollision();
-            checkBottleCollision();
+            this.checkEnemyCollision();
+            this.checkCoinCollision();
+            this.checkBottleCollision();
             this.updateStatusBar();
             this.level.door.checkState();
             this.level.checkLevelEndReached(this.character.x);

@@ -51,10 +51,4 @@ class Chicken extends Enemy {
             this.audioAttack.play();
         }
     }
-
-    hit(hitpoints) {
-        super.hit(hitpoints);
-        console.log('Hitted' + this.energy);
-        
-    }
 }
