@@ -34,14 +34,22 @@ class Chicken extends Enemy {
             if (this.isDead()) {
                 return;
             }
-            if (this.world.character.x < this.x) {
-                this.mirrorY = false;
-                this.moveLeft();
-            } else {
-                this.mirrorY = true;
-                this.moveRight();
-            }
+            this.handleMovement();
         }, ANIMATION_INTERVAL);
+    }
+
+    /**
+     * Handles thechicken movement based on its state.
+     * @private
+     */
+    handleMovement() {
+        if (this.world.character.x < this.x) {
+            this.mirrorY = false;
+            this.moveLeft();
+        } else {
+            this.mirrorY = true;
+            this.moveRight();
+        }
     }
 
     /**

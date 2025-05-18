@@ -149,17 +149,25 @@ class Endboss extends Enemy {
                 this.moveDead();
                 return;
             }
-            if (this.state !== 'walking') {
-                return;
-            }
-            if (this.world.character.x < this.x) {
-                this.mirrorY = false;
-                this.moveLeft();
-            } else {
-                this.mirrorY = true;
-                this.moveRight();
-            }            
+            this.handleMovement();          
         }, ANIMATION_INTERVAL);
+    }
+
+    /**
+     * Handles the boss's movement based on its state.
+     * @private
+     */
+    handleMovement() {
+        if (this.state !== 'walking') {
+            return;
+        }
+        if (this.world.character.x < this.x) {
+            this.mirrorY = false;
+            this.moveLeft();
+        } else {
+            this.mirrorY = true;
+            this.moveRight();
+        }  
     }
 
     /**
