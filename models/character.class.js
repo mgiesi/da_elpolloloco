@@ -19,10 +19,10 @@ class Character extends MovableObject {
     targetOffset_x = 100;
 
     offset = {
-        top: 100,
-        right: 40,
-        bottom: 5,
-        left: 20
+        top: 120,
+        right: 50,
+        bottom: 10,
+        left: 30
     };
 
     IMAGES_IDLE = [
@@ -101,6 +101,7 @@ class Character extends MovableObject {
     }
 
     init() {
+        this.loadImage(this.IMAGES_WALK[0])
         this.coins = 0;
         this.bottles = [];
         this.setImgType('idle');
@@ -108,6 +109,7 @@ class Character extends MovableObject {
         this.x = 0;
         this.offset_x = 100;
         this.targetOffset_x = 100;
+        this.mirrorY = false;
         this.move();
         this.animate();
         this.gravity();
@@ -191,7 +193,7 @@ class Character extends MovableObject {
         super.moveRight();
         this.targetOffset_x = 100;
         if (this.offset_x > this.targetOffset_x) {
-            this.offset_x -= this.speed/2;
+            this.offset_x -= this.speed*3;
         }
     }
 
@@ -203,7 +205,7 @@ class Character extends MovableObject {
         super.moveLeft();
         this.targetOffset_x = this.world.canvas.width - this.width - 100;
         if (this.offset_x < this.targetOffset_x) {
-            this.offset_x += this.speed/2;
+            this.offset_x += this.speed*3;
         }
     }
 
@@ -299,16 +301,19 @@ class Character extends MovableObject {
      * @returns {boolean} True if this entity is above the object, moving downward, visible, and within the collision thresholds; otherwise false.
      */
     isJumpedOn(obj) {
-        let bx1 = (this.x + this.width - this.offset.right) >= obj.x + obj.offset.left;
-        let bx2 = (this.x + this.width - this.offset.right) <= obj.x + obj.width - obj.offset.right;
-        let bx3 = (this.x + this.offset.left) >= (obj.x + obj.offset.left);
-        let bx4 = (this.x + this.offset.left) <= (obj.x + obj.width - obj.offset.right);
+        let x1 = (this.x + (this.mirrorY ? this.offset.left : this.offset.right));
+        let x2 = (this.x + this.width - (this.mirrorY ? this.offset.left : this.offset.right));
+        let xx1 = obj.x + obj.offset.left;
+        let xx2 = obj.x + obj.width - obj.offset.right;
+        let condition1 = x1 <= xx1 && x2 >= xx2;
+        let condition2 = x2 >= xx1 && x2 <= xx2;
+        let condition3 = x1 >= xx1 && x1 <= xx2;
         let by1 = (this.y + this.height + this.offset.bottom) >= obj.y + obj.offset.top;
         let by2 = (this.y + this.height + this.offset.bottom) <= (obj.y + obj.offset.top + 30);
         return obj.visible &&
                !obj.isDead() && 
                this.speedY < 0 &&
-               ((bx1 && bx2) || (bx3 && bx4)) && by1 && by2;
+               (condition1 || condition2 || condition3) && by1 && by2;
     }
 
     setSleep() {
@@ -331,5 +336,9 @@ class Character extends MovableObject {
             this.audioSleep.pause();
             this.audioWalk.pause();
         }
+    }
+
+    pause() {
+        this.audioSleep.pause();
     }
 }

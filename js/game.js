@@ -2,6 +2,7 @@ let canvas;
 let world;
 let keyboard;
 let gameLevel;
+let fullscreen;
 
 /**
  * Initializes the application by navigating to the splash screen.
@@ -24,6 +25,7 @@ function initGame() {
     canvas = document.getElementById('canvas-game');
     world = new World(canvas, keyboard);
     initSettings();
+    initSoundView();
 }
 
 /**
@@ -56,6 +58,27 @@ function restartGame() {
     resizeCanvasProportional();
 }
 
+
+function initSoundView() {
+    const btnRef = document.getElementById('btn-toggle-sounds-img');
+    if (world.playSounds || world.playMusic) {
+        btnRef.src = './img/icons/sounds_off.svg' 
+    } else {
+        btnRef.src = './img/icons/sounds_on.svg' 
+    }
+}
+
+function toggleSounds() {
+    if (world.playSounds || world.playMusic) {
+        setSetting('music', false);
+        setSetting('sound', false);
+    } else {
+        setSetting('music', true);
+        setSetting('sound', true);
+    }
+    initSoundView();
+}
+
 function onResizeScreen() {
     checkOrientation();
     resizeCanvasProportional();
@@ -83,21 +106,44 @@ function checkOrientation() {
  * @returns {void}
  */
 function resizeCanvasProportional() {
-    const canvas = document.getElementById('canvas-game');
-    const wrapper = document.getElementById('container-game');
+    const wrapper = document.getElementById('container-game-wrapper');
     const maxW = Math.min(wrapper.clientWidth, 1920);
     const maxH = Math.min(wrapper.clientHeight, 1080);
-
     const heightBasedW = maxH * (720 / 480);
     const widthBasedH = maxW * (480 / 720);
-
     if (heightBasedW <= maxW) {
-        canvas.style.width = `${heightBasedW}px`;
-        canvas.style.height = `${maxH}px`;
+        resizeContainers(heightBasedW, maxH)
     } else {
-        canvas.style.width = `${maxW}px`;
-        canvas.style.height = `${widthBasedH}px`;
+        resizeContainers(maxW, widthBasedH);
     }
+}
+
+function resizeContainers(width, height) {
+    const canvas = document.getElementById('canvas-game');
+    const containerButtons = document.getElementById('container-button-overlay');
+
+    if (fullscreen) {
+        canvas.style.width = `100%`;
+        canvas.style.height = `100%`;
+        containerButtons.style.width = `100%`;
+        containerButtons.style.height = `100%`;
+        const containerRefs = document.getElementsByClassName('container');
+        Array.from(containerRefs).forEach(container => {
+            container.style.maxWidth = `100%`;
+            container.style.maxHeight = `100%`;
+        });
+    } else {
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        containerButtons.style.width = `${width}px`;
+        containerButtons.style.height = `${height}px`;
+        const containerRefs = document.getElementsByClassName('container');
+        Array.from(containerRefs).forEach(container => {
+            container.style.maxWidth = `${width}px`;
+            container.style.maxHeight = `${height}px`;
+        });
+    }
+    
 }
 
 // Event listeners to handle dynamic changes

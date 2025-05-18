@@ -239,6 +239,7 @@ class World {
         if ((this.keyboard.PAUSE && !this.lastPauseKey && !this.pause) ||
             (this.keyboard.ESCAPE && !this.lastEscapeKey && !this.pause) ) {
             this.pause = true;
+            this.character.pause();
             navigateTo('pause');
         }
 

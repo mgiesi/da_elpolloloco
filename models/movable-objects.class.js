@@ -29,9 +29,9 @@ class MovableObject extends DrawableObject {
     isColliding(obj) {
         return obj.visible &&
                !obj.isDead() &&
-               (this.x + this.width - this.offset.right) >= obj.x + obj.offset.left && 
+               (this.x + this.width - (this.mirrorY ? this.offset.left : this.offset.right)) >= obj.x + obj.offset.left && 
                (this.y + this.height + this.offset.bottom) >= obj.y + obj.offset.top &&
-               (this.x + this.offset.left) <= (obj.x + obj.width - obj.offset.right) &&
+               (this.x + (this.mirrorY ? this.offset.right : this.offset.left)) <= (obj.x + obj.width - obj.offset.right) &&
                (this.y + this.offset.top) <= (obj.y + obj.height - obj.offset.bottom);
     }
 

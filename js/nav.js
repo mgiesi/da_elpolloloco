@@ -65,12 +65,17 @@ function showLandscapeInfo() {
         container.classList.add('hidden');
     });
     document.getElementById('container-landscapeinfo').classList.remove('hidden');
+    document.getElementById('container-button-overlay').classList.add('hidden');
     if (world !== undefined) {
         world.pause = true;
     }
 }
 
 function hideLandscapeInfo() {
+    document.getElementById('container-button-overlay').classList.remove('hidden');
+    if (currentContainer === 'game') {
+        currentContainer = 'pause';
+    }
     navigateTo(currentContainer);
 }
 
@@ -105,12 +110,14 @@ function showNextLevelScreen() {
  */
 function toggleFullscreen() {
     if (document.fullscreenElement) {
+        fullscreen = false;
         if (document.exitFullscreen) {
             document.exitFullscreen();
         } else if (document.webkitExitFullscreen) {
             document.webkitExitFullscreen();
         }
     } else {
+        fullscreen = true;
         const element = document.getElementById('container-game-wrapper');
         if (element.requestFullscreen) {
             element.requestFullscreen();
@@ -120,4 +127,5 @@ function toggleFullscreen() {
             element.webkitRequestFullscreen();
         }
     }
+    resizeCanvasProportional();
 }

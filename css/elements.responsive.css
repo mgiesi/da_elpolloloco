@@ -75,10 +75,20 @@
     .gameover img {
         width: 400px;
     }
+
+    .btn-overlay {
+        width: 30px;
+        height: 30px;
+    }
 }
 
 @media (max-height: 600px) {
     .btn-main {
         width: 100%;
+    }
+
+    .btn-overlay {
+        width: 20px;
+        height: 20px;
     }
 }

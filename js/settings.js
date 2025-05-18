@@ -31,6 +31,11 @@ function loadSetting(key) {
     world.setSetting(key, value);
 }
 
+function setSetting(key, value) {
+    localStorage.setItem(key, value);
+    loadSetting(key);
+}
+
 /**
  * Toggles a setting value between true and false,
  * saves it in localStorage, and reloads the setting elements.

@@ -13,4 +13,16 @@
     justify-content: center;
     margin-top: 24px;
   }
+  #btn-toggle-sounds {
+      position: absolute;
+      top: 0;
+      right: 60px;
+      margin: 1rem;
+  }
+  #btn-pause {
+      position: absolute;
+      top: 0;
+      right: 120px;
+      margin: 1rem;
+  }
 }
