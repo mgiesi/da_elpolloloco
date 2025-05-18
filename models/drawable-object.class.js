@@ -1,24 +1,52 @@
+/**
+ * Base class for all drawable objects in the game.
+ * Handles image loading, sprite animation, drawing (with optional horizontal mirroring),
+ * and bounding‐box visualization for movable objects.
+ */
 class DrawableObject {
     x = 120;
     y = 330;
     width = 100;
     height = 100;
+    /**
+     * Current Image element being drawn.
+     * @type {HTMLImageElement}
+     */
     img;
+    /**
+     * Cache of loaded images by animation type.
+     * @type {Object.<string, HTMLImageElement[]>}
+     */
     imgCache = {};
+    /**
+     * Frame duration cache (milliseconds) for each animation type.
+     * @type {Object.<string, number>}
+     */
     imgTimeCache = {};
     currentImg = 0;
     currentImgType;
     currentImgTime = 0;
     animationDone;
     world;
-
     visible = true;
 
+    /**
+     * Loads a single image for this object.
+     *
+     * @param {string} path - URL or path to the image file.
+     */
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
     }
 
+    /**
+     * Preloads an array of images for an animation type.
+     *
+     * @param {string} type - Identifier for the animation (e.g. "run", "jump").
+     * @param {string[]} arr - Array of image URLs/paths.
+     * @param {number} time - Duration (ms) each frame should display.
+     */
     loadImages(type, arr, time) {
         this.imgCache[type] = [];
         arr.forEach((path) => {
@@ -29,11 +57,13 @@ class DrawableObject {
         });
     }
 
+    /**
+     * Advances to the next frame in the current animation, looping back to start.
+     */
     displayNextImage() {
         if (!this.checkNextImage()) {
             return;
         }
-
         if (this.currentImgType !== undefined) {
             this.img = this.imgCache[this.currentImgType][this.currentImg];
             this.currentImg++;
@@ -43,11 +73,15 @@ class DrawableObject {
         }
     }
 
+    /**
+     * Advances through the current animation once, then stops on the last frame.
+     *
+     * @returns {boolean} True if the animation has completed his cycle.
+     */
     displayNextImageOnce() {
         if (!this.checkNextImage()) {
             return;
         }
-
         this.img = this.imgCache[this.currentImgType][this.currentImg];
         this.currentImg++;
         if (this.currentImg >= this.imgCache[this.currentImgType].length) {
@@ -59,6 +93,12 @@ class DrawableObject {
         return false;
     }
 
+    /**
+     * Determines whether enough time has passed to advance to the next animation frame.
+     *
+     * @returns {boolean} True if the frame should advance.
+     * @private
+     */
     checkNextImage() {
         if (this.currentImgTime < 0) {
             this.currentImgTime = 0;
@@ -69,11 +109,15 @@ class DrawableObject {
                 return false;
             }
         }
-
         this.currentImgTime -= this.imgTimeCache[this.currentImgType];
         return true;
     }
 
+    /**
+     * Switches the active animation type, resetting frame counters if changed.
+     *
+     * @param {string} imgType - Key corresponding to a set of preloaded frames.
+     */
     setImgType(imgType) {
         if (this.currentImgType != imgType) {
             this.currentImgTime = -1;
@@ -82,6 +126,11 @@ class DrawableObject {
         this.currentImgType = imgType;
     }
 
+    /**
+     * Draws the object to the canvas context, applying mirroring if set.
+     *
+     * @param {CanvasRenderingContext2D} ctx - The canvas 2D rendering context.
+     */
     draw(ctx) {     
         if (this.visible) {   
             this.flipImg(ctx);
@@ -91,6 +140,12 @@ class DrawableObject {
         }
     }
 
+    /**
+     * Applies horizontal mirroring transform if mirrorY is true.
+     *
+     * @param {CanvasRenderingContext2D} ctx
+     * @private
+     */
     flipImg(ctx) {
         if (this.mirrorY) {
             ctx.save();
@@ -100,6 +155,12 @@ class DrawableObject {
         }
     }
 
+    /**
+     * Restores canvas state after mirroring and resets x-position.
+     *
+     * @param {CanvasRenderingContext2D} ctx
+     * @private
+     */
     flipImgBack(ctx) {
         if (this.mirrorY) {
             this.x = this.x * -1;
@@ -107,6 +168,12 @@ class DrawableObject {
         }
     }
 
+    /**
+     * Draws the current image frame at (x, y) with the defined width/height.
+     *
+     * @param {CanvasRenderingContext2D} ctx
+     * @private
+     */
     drawImg(ctx) {
         if (this.img !== undefined) {
             try {
@@ -118,6 +185,12 @@ class DrawableObject {
         }
     }
 
+    /**
+     * Draws a bounding box around the object (for debugging collision).
+     *
+     * @param {CanvasRenderingContext2D} ctx
+     * @private
+     */
     drawBBox(ctx) {
         if (this instanceof MovableObject) {
             ctx.beginPath();
@@ -128,6 +201,11 @@ class DrawableObject {
         }
     }
 
+    /**
+     * Sets the visibility of the object.
+     *
+     * @param {boolean} visible - True to draw the object, false to hide.
+     */
     setVisible(visible) {
         this.visible = visible;
     }

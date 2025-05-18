@@ -1,13 +1,20 @@
+/**
+ * Represents the end boss enemy in the game, with multiple animation states,
+ * sound effects, and AI for engaging the player. Extends the generic Enemy class.
+ *
+ * @extends Enemy
+ */
 class Endboss extends Enemy {
     width = 320;
     height = 320;
     currentImgType = 'alert';
-
     state = 'idle';
-
     audio;
     audioDead;
-    
+    /**
+     * Collision offset for fine-tuned hit detection.
+     * @type {{ top: number, right: number, bottom: number, left: number }}
+     */
     offset = {
         top: 50,
         right: 0,
@@ -56,6 +63,12 @@ class Endboss extends Enemy {
         './img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
 
+    /**
+     * Creates the Endboss at the specified x-coordinate, loads all animations and sounds,
+     * sets initial game-level stats, and begins its AI loops.
+     *
+     * @param {number} x - Horizontal spawn position for the end boss.
+     */
     constructor(x) {
         super().loadImage(this.IMAGES_ALERT[0]);
         this.loadImages('walk', this.IMAGES_WALKING, 150);
@@ -70,6 +83,10 @@ class Endboss extends Enemy {
         this.move();
     }
 
+    /**
+     * Initializes audio: looping battle music and death sound.
+     * @private
+     */
     initAudio() {
         this.audio = new Audio('./audio/endboss.mp3');
         this.audio.addEventListener('ended', function() {
@@ -79,36 +96,50 @@ class Endboss extends Enemy {
         this.audioDead = new Audio('./audio/endbossdead.mp3');
     }
 
+    /**
+     * Sets the boss's position at ground level based on sprite height.
+     *
+     * @param {number} x - Horizontal position.
+     * @private
+     */
     initPosition(x) {
         this.x = x;
         this.y = 480 - this.height - 35;
     }
 
+    /**
+     * Configures hitpoints, max energy, and speed based on global difficulty.
+     * Supported levels: 'easy', 'medium', 'hard'.
+     * @private
+     */
     initGameLevel() {
         switch (gameLevel) {
             case 'easy':
-                this.hitpoints = 4;
-                this.maxenergy = 50;
-                this.speed = 0.5 + Math.random();
+                this.setGameLevel(4, 50, 0.5 + Math.random());
                 break;
             case 'medium':
-                this.hitpoints = 15;
-                this.maxenergy = 100;
-                this.speed = 0.6 + Math.random();
+                this.setGameLevel(15, 100, 0.6 + Math.random());
                 break;
             case 'hard':
-                this.hitpoints = 30;
-                this.maxenergy = 150;
-                this.speed = 0.7 + Math.random();
+                this.setGameLevel(30, 150, 0.7 + Math.random());
                 break;
         }
         this.energy = this.maxenergy;
     }
 
+    /**
+     * Returns true if the boss is currently idle.
+     * @returns {boolean}
+     */
     isIdle() {
         return this.state === 'idle';
     }
 
+    /**
+     * Starts the movement AI loop: walks toward the player when in 'walking' state,
+     * or falls down slightly if dead.
+     * @private
+     */
     move() {
         setStoppableInterval(() => {
             if (!this.world || !this.world.isRunning()) {
@@ -131,6 +162,10 @@ class Endboss extends Enemy {
         }, ANIMATION_INTERVAL);
     }
 
+    /**
+     * Applies a downward drift when the boss is dead.
+     * @private
+     */
     moveDead() {
         this.y += 10;
         if (this.y > 200) {
@@ -138,6 +173,11 @@ class Endboss extends Enemy {
         }
     }
 
+    /**
+     * Starts the animation AI loop, transitioning through states:
+     * idle → alerted → walking → attacking/hurt → dead.
+     * @private
+     */
     animate() {
         setStoppableInterval( () => {
             if (this.isDead()) {
@@ -158,12 +198,20 @@ class Endboss extends Enemy {
         }, ANIMATION_INTERVAL);      
     }
 
+    /**
+     * Plays the death animation and stops battle music.
+     * @private
+     */
     animateDead() {
         this.audio.pause();
         this.setImgType('dead');
         this.displayNextImageOnce();
     }
 
+    /**
+     * Plays the alert animation once, then transitions to walking and starts music.
+     * @private
+     */
     animateAlerted() {
         this.setImgType('alert');
         this.displayNextImageOnce();
@@ -175,6 +223,10 @@ class Endboss extends Enemy {
         }
     }
 
+    /**
+     * Plays the attack animation once, then returns to walking state.
+     * @private
+     */
     animateAttacking() {
         this.setImgType('attack');
         this.displayNextImageOnce();
@@ -183,6 +235,10 @@ class Endboss extends Enemy {
         }
     }
 
+    /**
+     * Plays the hurt animation once, then returns to walking state.
+     * @private
+     */
     animateHurted() {
         this.setImgType('hurt');
         this.displayNextImageOnce();
@@ -191,16 +247,30 @@ class Endboss extends Enemy {
         }
     }
 
+    /**
+     * Loops through walking frames while in the walking state.
+     * @private
+     */
     animateWalking() {
         this.setImgType('walk');
         this.displayNextImage();
     }
 
+    /**
+     * Called when the boss is attacked: triggers hurt animation and state.
+     * @override
+     */
     attacked() {
         super.attacked();
         this.state = 'attacking';
     }
 
+    /**
+     * Applies damage to the boss, triggers hurt or death logic, and plays death sound if needed.
+     *
+     * @param {number} hitpoints - Amount of damage to apply.
+     * @override
+     */
     hit(hitpoints) {
         super.hit(hitpoints);
         this.state = 'hurted';
@@ -209,5 +279,12 @@ class Endboss extends Enemy {
                 this.audioDead.play();
             }
         }
+    }
+    
+    /**
+     * Pauses any ongoing sleep sound.
+     */
+    pause() {
+        this.audio.pause();
     }
 }

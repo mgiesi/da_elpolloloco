@@ -31,6 +31,12 @@ function loadSetting(key) {
     world.setSetting(key, value);
 }
 
+/**
+ * Sets a setting value to the given value and stores it in localStorage.
+ * 
+ * @param {string} key 
+ * @param {string} value 
+ */
 function setSetting(key, value) {
     localStorage.setItem(key, value);
     loadSetting(key);

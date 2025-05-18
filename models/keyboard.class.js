@@ -11,6 +11,9 @@ class Keyboard {
     PAUSE = false;
     ESCAPE = false;
 
+    /**
+     * Creates a new keyboard object and binds event listeners for keyboard and touch controls.
+     */
     constructor() {
         this.bindKeyboardKeys();
         this.bindBtnKeys();

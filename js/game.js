@@ -68,6 +68,9 @@ function initSoundView() {
     }
 }
 
+/**
+ * Toggles the sound (music and sound effects).
+ */
 function toggleSounds() {
     if (world.playSounds || world.playMusic) {
         setSetting('music', false);
@@ -79,6 +82,11 @@ function toggleSounds() {
     initSoundView();
 }
 
+/**
+ * Function to update the size of the game canvas and to
+ * show the orientation information screen if application is
+ * in landscape mode.
+ */
 function onResizeScreen() {
     checkOrientation();
     resizeCanvasProportional();
@@ -118,32 +126,26 @@ function resizeCanvasProportional() {
     }
 }
 
+/**
+ * Sets the width/height and minwidth/minheight for the game containers.
+ * 
+ * @param {number} width new width 
+ * @param {number} height new height
+ */
 function resizeContainers(width, height) {
     const canvas = document.getElementById('canvas-game');
     const containerButtons = document.getElementById('container-button-overlay');
-
-    if (fullscreen) {
-        canvas.style.width = `100%`;
-        canvas.style.height = `100%`;
-        containerButtons.style.width = `100%`;
-        containerButtons.style.height = `100%`;
-        const containerRefs = document.getElementsByClassName('container');
-        Array.from(containerRefs).forEach(container => {
-            container.style.maxWidth = `100%`;
-            container.style.maxHeight = `100%`;
-        });
-    } else {
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-        containerButtons.style.width = `${width}px`;
-        containerButtons.style.height = `${height}px`;
-        const containerRefs = document.getElementsByClassName('container');
-        Array.from(containerRefs).forEach(container => {
-            container.style.maxWidth = `${width}px`;
-            container.style.maxHeight = `${height}px`;
-        });
-    }
-    
+    let widthText = fullscreen ? '100%' : `${width}px`;
+    let heightText = fullscreen ? '100%' : `${height}px`;
+    canvas.style.width = widthText;
+    canvas.style.height = heightText;
+    containerButtons.style.width = widthText;
+    containerButtons.style.height = heightText;
+    const containerRefs = document.getElementsByClassName('container');
+    Array.from(containerRefs).forEach(container => {
+        container.style.maxWidth = widthText;
+        container.style.maxHeight = heightText;
+    });    
 }
 
 // Event listeners to handle dynamic changes

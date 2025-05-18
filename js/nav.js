@@ -24,7 +24,14 @@ function navigateTo(page) {
     currentContainer = page;
     toggleGameButtons();
     stopSounds();
-    if (page === 'gameover') {
+    playGameOverSound();
+}
+
+/**
+ * Plays the game over sound if the current container is 'gameover'.
+ */
+function playGameOverSound() {
+    if (currentContainer === 'gameover') {
         if (world.playSounds) {
             audioGameOver.currentTime = 0;
             audioGameOver.play();
@@ -32,6 +39,9 @@ function navigateTo(page) {
     }
 }
 
+/**
+ * Stops all game sounds by pausing the audio elements.
+ */
 function stopSounds() {
     audioGameWon.pause();
     audioLevelDone.pause();
@@ -71,6 +81,10 @@ function showLandscapeInfo() {
     }
 }
 
+/**
+ * Hides the landscape orientation info by showing the game container,
+ * updating the current container state, and resuming the game world.
+ */
 function hideLandscapeInfo() {
     document.getElementById('container-button-overlay').classList.remove('hidden');
     if (currentContainer === 'game') {
@@ -87,18 +101,33 @@ function hideLandscapeInfo() {
 function showNextLevelScreen() {
     world.stopGame();
     if (world.levelIdx >= 3) {
-        navigateTo('gamewon');
-        if (world.playSounds) {
-            audioGameWon.currentTime = 1;
-            audioGameWon.play();
-        }
+        showGameWonScreen();
     } else {
-        document.getElementById('nextlevel_text').innerHTML = "Level " + (world.levelIdx + 1);
-        navigateTo('nextlevel');
-        if (world.playSounds) {
-            audioLevelDone.currentTime = 1;
-            audioLevelDone.play();
-        }
+        showNextLevelScreenImpl();
+    }
+}
+
+/**
+ * Jumps to the 'game won' screen and plays the game won sound.
+ */
+function showGameWonScreen() {
+    navigateTo('gamewon');
+    if (world.playSounds) {
+        audioGameWon.currentTime = 1;
+        audioGameWon.play();
+    }
+}
+
+/**
+ * Jumps to the 'next level' screen and plays the level done sound.
+ * @private
+ */
+function showNextLevelScreenImpl() {
+    document.getElementById('nextlevel_text').innerHTML = "Level " + (world.levelIdx + 1);
+    navigateTo('nextlevel');
+    if (world.playSounds) {
+        audioLevelDone.currentTime = 1;
+        audioLevelDone.play();
     }
 }
 
@@ -110,22 +139,40 @@ function showNextLevelScreen() {
  */
 function toggleFullscreen() {
     if (document.fullscreenElement) {
-        fullscreen = false;
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
+        initFullscreen();
     } else {
-        fullscreen = true;
-        const element = document.getElementById('container-game-wrapper');
-        if (element.requestFullscreen) {
-            element.requestFullscreen();
-        } else if (element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
-            element.msRequestFullscreen();
-        } else if (element.webkitRequestFullscreen) {  // iOS Safari
-            element.webkitRequestFullscreen();
-        }
+        resetFullscreen();
     }
     resizeCanvasProportional();
+}
+
+/**
+ * Initializes fullscreen mode by setting the fullscreen flag to false
+ * and exiting fullscreen if possible.
+ * @private
+ */
+function initFullscreen() {
+    fullscreen = false;
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
+}
+
+/**
+ * Resets fullscreen mode by setting the fullscreen flag to true
+ * and requesting fullscreen on the game container element.
+ * @private
+ */
+function resetFullscreen() {
+    fullscreen = true;
+    const element = document.getElementById('container-game-wrapper');
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.msRequestFullscreen) {      // for IE11 (remove June 15, 2022)
+        element.msRequestFullscreen();
+    } else if (element.webkitRequestFullscreen) {  // iOS Safari
+        element.webkitRequestFullscreen();
+    }
 }

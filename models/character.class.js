@@ -1,3 +1,9 @@
+/**
+ * Represents the main playable character, extending MovableObject.
+ * Handles movement, jumping, animations, item collection, and sound effects.
+ *
+ * @extends MovableObject
+ */
 class Character extends MovableObject {
     width = 150;
     height = 250;
@@ -6,18 +12,17 @@ class Character extends MovableObject {
     acceleration = 0.5;
     coins = 0;
     bottles = [];
-
     sleepTimeout = 5000;
-
     audioWalk;
     audioSleep;
-
     lastKeyPress;
     lastSpaceState;
-
     offset_x = 100;
     targetOffset_x = 100;
-
+    /**
+     * Collision box insets.
+     * @type {{ top: number, right: number, bottom: number, left: number }}
+     */
     offset = {
         top: 120,
         right: 50,
@@ -88,6 +93,9 @@ class Character extends MovableObject {
         './img/2_character_pepe/5_dead/D-57.png'
     ];
 
+    /**
+     * Constructs the character, loads images and audio, and sets initial position.
+     */
     constructor() {
         super().loadImage(this.IMAGES_WALK[0])
         this.loadImages('idle', this.IMAGES_IDLE, 250);
@@ -100,32 +108,55 @@ class Character extends MovableObject {
         this.initPosition();
     }
 
+    /**
+     * Initializes character state at the start of a level.
+     */
     init() {
         this.loadImage(this.IMAGES_WALK[0])
-        this.coins = 0;
-        this.bottles = [];
-        this.setImgType('idle');
         this.lastKeyPress = Date.now();
         this.x = 0;
         this.offset_x = 100;
         this.targetOffset_x = 100;
         this.mirrorY = false;
+        this.initGameObjects();
         this.move();
         this.animate();
         this.gravity();
         this.initGameLevel();
     }
 
+    /**
+     * Initializes game objects, including coins and bottles.
+     * @private
+     */
+    initGameObjects() {
+        this.coins = 0;
+        this.bottles = [];
+        this.setImgType('idle');
+    }
+
+    /**
+     * Loads audio elements for walking and sleeping.
+     * @private
+     */
     initAudio() {        
         this.audioWalk = new Audio('./audio/walk.mp3');
         this.audioSleep = new Audio('./audio/sleep.mp3');
     }
 
+    /**
+     * Sets the character's initial vertical position on the ground.
+     * @private
+     */
     initPosition() {
         this.groundY = 480 - this.height - 50;
         this.y = this.groundY; 
     }
 
+    /**
+     * Configures max energy based on global game level difficulty.
+     * @private
+     */
     initGameLevel() {
         switch (gameLevel) {
             case 'easy':
@@ -141,10 +172,17 @@ class Character extends MovableObject {
         this.energy = this.maxenergy;
     }
 
+    /**
+     * Resets energy to the level-based maximum.
+     */
     resetEnergy() {
         this.initGameLevel();
     }
 
+    /**
+     * Starts gravity and jump detection loop.
+     * @private
+     */
     gravity() {
         setStoppableInterval( () => {
             if (!this.world || !this.world.isRunning()) {
@@ -160,6 +198,10 @@ class Character extends MovableObject {
         }, ANIMATION_INTERVAL);
     }
 
+    /**
+     * Starts movement loop, handling left/right keys, camera follow, and walk sound.
+     * @private
+     */
     move() {
         setStoppableInterval( () => {
             if (!this.world || !this.world.isRunning()) {
@@ -168,23 +210,33 @@ class Character extends MovableObject {
             if (this.isDead()) {
                 return;
             }
-            let tmpMoveRight = this.world.keyboard.RIGHT && this.world.level.canMoveRight(this.x);
-            let tmpMoveLeft = this.world.keyboard.LEFT && this.x > 0;
-            if (tmpMoveRight) {
-                this.moveRight();
-            } else if (tmpMoveLeft) {
-                this.moveLeft();
-            } else {
-                this.audioWalk.pause();
-                this.audioWalk.currentTime = 0;
-            }
-
-            if (Math.abs(this.world.camera_x) < this.world.level.door.x + 100 || tmpMoveLeft) {
-                this.world.camera_x = -this.x + this.offset_x;
-            }
+            this.handleMovement();
         }, ANIMATION_INTERVAL);
     }
 
+    /**
+     * Handles character movement based on keyboard input.
+     */
+    handleMovement() {
+        let tmpMoveRight = this.world.keyboard.RIGHT && this.world.level.canMoveRight(this.x);
+        let tmpMoveLeft = this.world.keyboard.LEFT && this.x > 0;
+        if (tmpMoveRight) {
+            this.moveRight();
+        } else if (tmpMoveLeft) {
+            this.moveLeft();
+        } else {
+            this.audioWalk.pause();
+            this.audioWalk.currentTime = 0;
+        }
+        if (Math.abs(this.world.camera_x) < this.world.level.door.x + 100 || tmpMoveLeft) {
+            this.world.camera_x = -this.x + this.offset_x;
+        }
+    }
+
+    /**
+     * Moves character to the right, plays walk sound, and adjusts camera offset.
+     * @override
+     */
     moveRight() {
         this.mirrorY = false;
         if (this.world.playSounds) {
@@ -197,6 +249,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Moves character to the left, plays walk sound, and adjusts camera offset.
+     * @override
+     */
     moveLeft() {
         this.mirrorY = true;
         if (this.world.playSounds) {
@@ -209,6 +265,11 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Starts animation loop for idle, walk, jump, hurt, and death states, and
+     * detects bottle throws on spacebar press.
+     * @private
+     */
     animate() {
         setStoppableInterval( () => {
             if (!this.world || !this.world.isRunning()) {
@@ -230,6 +291,10 @@ class Character extends MovableObject {
         }, ANIMATION_INTERVAL);        
     }
 
+    /**
+     * Plays death animation then transitions to game over.
+     * @private
+     */
     animateDead() {
         this.setImgType('dead');
         this.displayNextImageOnce();
@@ -239,6 +304,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Plays hurt animation and resets hurt flag when done.
+     * @private
+     */
     animateHurt() {
         this.resetSleep();
         this.setImgType('hurt');
@@ -247,12 +316,20 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Plays jump animation.
+     * @private
+     */
     animateJump() {
         this.resetSleep();
         this.setImgType('jump');
         this.displayNextImage()
     }
 
+    /**
+     * Determines whether to play walk, idle, or sleep animation based on input and timing.
+     * @private
+     */
     checkAnimateJump() {
         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
             this.resetSleep();
@@ -268,14 +345,24 @@ class Character extends MovableObject {
         this.displayNextImage(); 
     }
 
+    /**
+     * Increments coin count.
+     */
     addCoin() {
         this.coins++;
     }
 
+    /**
+     * Adds a bottle to the character's inventory.
+     * @param {Bottle} bottle - The bottle to add.
+     */
     addBottle(bottle) {
         this.bottles.push(bottle);
     }
 
+    /**
+     * Throws the last collected bottle, if any.
+     */
     throwBottle() {
         let bottle = this.bottles.pop();
         if (bottle) {
@@ -284,21 +371,10 @@ class Character extends MovableObject {
     }
     
     /**
-     * Determines whether this entity has successfully jumped on top of the given object.
+     * Determines if the character has landed on top of another object.
      *
-     * @param {Object} obj - The target object to check collision against.
-     * @param {number} obj.x - The x-coordinate of the object's top-left corner.
-     * @param {number} obj.y - The y-coordinate of the object's top-left corner.
-     * @param {number} obj.width - The width of the object.
-     * @param {number} obj.height - The height of the object.
-     * @param {Object} obj.offset - Pixel offsets applied to the object's collision bounds.
-     * @param {number} obj.offset.left - Left inset from the object's x position.
-     * @param {number} obj.offset.right - Right inset from the object's right edge.
-     * @param {number} obj.offset.top - Top inset from the object's y position.
-     * @param {number} obj.offset.bottom - Bottom inset from the object's bottom edge.
-     * @param {boolean} obj.visible - Whether the object is currently visible.
-     * @param {Function} obj.isDead - Function returning true if the object is considered “dead.”
-     * @returns {boolean} True if this entity is above the object, moving downward, visible, and within the collision thresholds; otherwise false.
+     * @param {Object} obj - Target object with x, y, width, height, offset, visible, and isDead().
+     * @returns {boolean} True if a valid downward collision from above.
      */
     isJumpedOn(obj) {
         let x1 = (this.x + (this.mirrorY ? this.offset.left : this.offset.right));
@@ -316,6 +392,10 @@ class Character extends MovableObject {
                (condition1 || condition2 || condition3) && by1 && by2;
     }
 
+    /**
+     * Triggers sleep sound if appropriate.
+     * @private
+     */
     setSleep() {
         if (this.world.playSounds && this.audioSleep.paused) {
             this.audioSleep.currentTime = 0.5;
@@ -323,6 +403,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Resets inactivity timer and pauses sleep sound.
+     * @private
+     */
     resetSleep() {
         this.lastKeyPress = Date.now();
         if (this.world.playSounds) {
@@ -330,6 +414,11 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Handles taking damage and pauses movement sounds if dead.
+     * @override
+     * @param {number} hitpoints - Damage to apply.
+     */
     hit(hitpoints) {
         super.hit(hitpoints);
         if (this.energy < 0) {
@@ -338,6 +427,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Pauses any ongoing sleep sound.
+     */
     pause() {
         this.audioSleep.pause();
     }
